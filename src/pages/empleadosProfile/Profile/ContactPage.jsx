@@ -71,7 +71,7 @@ const ContactsPage = () => {
         />
       </Box>
 
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1, margin: 0 }}>
         <Grid container spacing={2} sx={{ marginTop: 2, marginLeft: 15 }}>
           <Grid item xs={12} md={8}>
             <ContactProfile infoPersonal={informacionPersonal} />
@@ -80,11 +80,11 @@ const ContactsPage = () => {
             <ActionsMenu />
           </Grid>
 
-          <Grid item xs={12} md={10} container spacing={10}>
-            <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={8} container spacing={3}>
+            <Grid item xs={12} md={7}>
                 <GeneralInformation infoPersonal={informacionPersonal}/>
             </Grid>
-            <Grid item xs={10} md={6}>
+            <Grid item xs={10} md={5}>
               <ContactDetails infoPersonal={informacionPersonal} />
             </Grid>
           </Grid>
