@@ -71,16 +71,16 @@ const ContactsPage = () => {
         />
       </Box>
 
-      <Box component="main" sx={{ flexGrow: 1, margin: 0 }}>
-        <Grid container spacing={2} sx={{ marginTop: 2, marginLeft: 15 }}>
+      <Box component="main" sx={{ marginLeft: 15, marginTop: 2,  flexGrow: 1 }}>
+        <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             <ContactProfile infoPersonal={informacionPersonal} />
           </Grid>
-          <Grid item xs={12} md={1}>
+          <Grid item xs={12} md={2}>
             <ActionsMenu />
           </Grid>
 
-          <Grid item xs={12} md={8} container spacing={3}>
+          <Grid item xs={12} md={10} container spacing={3}>
             <Grid item xs={12} md={7}>
                 <GeneralInformation infoPersonal={informacionPersonal}/>
             </Grid>
