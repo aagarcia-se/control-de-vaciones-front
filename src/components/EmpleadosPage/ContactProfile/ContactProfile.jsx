@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardContent, Typography, Avatar, IconButton, Grid, styled } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { getLocalStorageData } from '../../../services/session/getLocalStorageData';
 
 // Estilos personalizados
@@ -24,21 +23,19 @@ const ProfileContent = styled(CardContent)({
   flex: '1 0 auto',
 });
 
-const ContactProfile = () => {
-  const userData = getLocalStorageData();
+const ContactProfile = (infoPersonal) => {
 
   return (
     <ProfileCard>
       <ProfileAvatar src="/path/to/avatar.jpg" />
       <ProfileContent>
-        <Typography component="div" variant="h5">
-          {userData.primerNombre + ' ' + userData.primerApellido }
+        <Typography variant="h5">
+          {`${infoPersonal.infoPersonal.primerNombre} ${infoPersonal.infoPersonal.segundoNombre} ${infoPersonal.infoPersonal.primerApellido} ${infoPersonal.infoPersonal.segundoApellido}`}
         </Typography>
-        <Typography variant="subtitle1" color="text.secondary" component="div">
+        <Typography variant="subtitle1" color="text.secondary">
           Software Engineer - Engineering - link-42
         </Typography>
-        {/* Acciones de editar y más */}
-        <Grid container spacing={2}>
+        <Grid container spacing={2} alignItems="center">
           <Grid item>
             <IconButton aria-label="edit">
               <EditIcon />

@@ -1,44 +1,54 @@
-import React from 'react';
-import { Grid, Typography, styled, useMediaQuery, useTheme } from '@mui/material';
+import React from "react";
+import { Box, Typography, Link, IconButton, Paper } from "@mui/material";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
+import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
 
-// Estilos personalizados usando sx
-const DetailText = styled(Typography)(({ theme }) => ({
-  fontSize: '0.9rem',
-  marginBottom: '8px',
-  color: '#5f6368',
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '0.8rem',
-  },
-}));
-
-const SectionTitle = styled(Typography)(({ theme }) => ({
-  fontSize: '1rem',
-  fontWeight: 'bold',
-  marginBottom: '8px',
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '0.9rem',
-  },
-}));
-
-const ContactDetails = () => {
+const ContactDetails = (infoPersonal) => {
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={4}>
-        <DetailText variant="body1"><strong>Email:</strong> elisa@example.com</DetailText>
-        <DetailText variant="body1"><strong>Phone:</strong> +1 (123) 456-7890</DetailText>
-        {/* Más detalles */}
-      </Grid>
-      <Grid item xs={12} md={4}>
-        <SectionTitle variant="h6">Managers</SectionTitle>
-        <DetailText variant="body1">Sylvia Ruiz</DetailText>
-        {/* Más información de Managers */}
-      </Grid>
-      <Grid item xs={12} md={4}>
-        <SectionTitle variant="h6">Reports</SectionTitle>
-        <DetailText variant="body1">Johannes Miles</DetailText>
-        {/* Más información de Reports */}
-      </Grid>
-    </Grid>
+    <Paper
+      elevation={3}
+      sx={{
+        padding: "16px",
+        borderRadius: "8px",
+        backgroundColor: "#f5f5f5", // Cambia el color de fondo si deseas blanco puro con #ffffff
+      }}
+    >
+      <Typography variant="h6" gutterBottom>
+        Datos de contacto
+      </Typography>
+
+      {/* Correo Electrónico */}
+      <Box display="flex" alignItems="center" mb={1}>
+        <IconButton size="small" color="primary">
+          <EmailOutlinedIcon />
+        </IconButton>
+        <Typography variant="body1" sx={{ marginLeft: 1 }}>
+          {infoPersonal.infoPersonal.correoPersonal}
+        </Typography>
+      </Box>
+
+      {/* Añadir número de teléfono */}
+      <Box display="flex" alignItems="center" mb={1}>
+        <IconButton size="small" color="primary">
+          <PhoneOutlinedIcon />
+        </IconButton>
+        <Typography variant="body1" sx={{ marginLeft: 1 }}>
+          {infoPersonal.infoPersonal.numeroCelular}
+        </Typography>
+      </Box>
+
+      {/* Añadir fecha de nacimiento */}
+      <Box display="flex" alignItems="center">
+        <IconButton size="small" color="primary">
+          <CakeOutlinedIcon />
+        </IconButton>
+        <Typography variant="body1" sx={{ marginLeft: 1 }}>
+  {new Date(infoPersonal.infoPersonal.fechaNacimiento).toLocaleDateString('en-GB')}
+</Typography>
+
+      </Box>
+    </Paper>
   );
 };
 
