@@ -4,7 +4,7 @@ import { createContext, useState } from  "react";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -26,9 +26,12 @@ const AuthProvider = ({ children }) => {
   };
 
 
+  const logout = () => {
+    setUserData(null);
+    localStorage.removeItem('userData');
+  };
 
-
-  const data = { userData, authenticate, loading, error };
+  const data = { logout, userData, authenticate, loading, error };
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
 };
 

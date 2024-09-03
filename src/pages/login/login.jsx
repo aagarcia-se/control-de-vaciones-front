@@ -19,6 +19,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../services/context/AuthContext.jsx";
+import { handleUserRedirect } from "../../services/utils/authHelpers.js";
 
 const defaultTheme = createTheme();
 
@@ -30,7 +31,7 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
 
   //variable tipo contexto
-  const { authenticate, loading, error } = useContext(AuthContext);
+  const { authenticate, loading, error, userData } = useContext(AuthContext);
 
   useEffect(() => {
     if (error) {
@@ -43,13 +44,16 @@ export default function SignIn() {
     }
   }, [error]);
 
+  // Nuevo useEffect para redirigir cuando userData cambie
+  useEffect(() => {
+    if (userData && Object.keys(userData).length > 0) {
+      handleUserRedirect(navigate, userData);
+    }
+  }, [userData, navigate]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     await authenticate(username, password);
-    if (error === null) {
-      navigate("/panel");
-    }
   };
 
   const handleClickShowPassword = () => {

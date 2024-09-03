@@ -8,8 +8,8 @@ const useLogout = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Eliminar los datos del localStorage
-    localStorage.removeItem("userData");
+    // Eliminar los datos del localStorage y limpia la variable de contexto
+    logout();
 
     // Redirigir al usuario a la página de inicio de sesión
     navigate("/");

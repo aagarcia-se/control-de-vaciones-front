@@ -28,7 +28,7 @@ function App() {
       <Route path='/datos-generales' element={ <DatosGeneralesForm/> }/>
       <Route path='/nuevo-empleado' element={ <EmpleadoNuevoForm/> }/>
       <Route path='/lista-de-empleados' element={ <ReporteEmpleado/> }/>
-      <Route path='/employee-profile' element={ <ContactsPage/> }/>
+      <Route path='/empleados/infoPersonal' element={ <ContactsPage/> }/>
       
     </Routes>
   )

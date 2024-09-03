@@ -9,6 +9,7 @@ import InfoIcon from '@mui/icons-material/Info'; // Datos generales
 import VacationIcon from '@mui/icons-material/BeachAccess'; // Programación de vacaciones
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'; // Ícono de cerrar sesión
 import { getLocalStorageData } from '../../../services/session/getLocalStorageData.js';
+import useLogout from '../../../services/session/logout.js';
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {
@@ -50,10 +51,11 @@ const LogoutButton = styled(Button)({
   },
 });
 
-const Sidebar = ({ mobileOpen, handleDrawerToggle, handleLogout }) => {
+const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const userData = getLocalStorageData();
   const userInitial = userData?.primerNombre.charAt(0).toUpperCase();
+  const { handleLogout } = useLogout();
 
   const handleAvatarClick = (event) => {
     setAnchorEl(event.currentTarget);

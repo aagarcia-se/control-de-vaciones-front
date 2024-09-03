@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Grid, IconButton } from "@mui/material";
 import Sidebar from "../../../components/EmpleadosPage/SideBar/SideBar";
-import SearchBar from "../../../components/EmpleadosPage/SerchBar/SerchBar";
 import ContactProfile from "../../../components/EmpleadosPage/ContactProfile/ContactProfile";
 import ContactDetails from "../../../components/EmpleadosPage/ContactDetails/ContactDetails";
 import GeneralInformation from "../../../components/EmpleadosPage/GeneralInformation/GeneralInformation";
@@ -9,12 +8,16 @@ import ActionsMenu from "../../../components/EmpleadosPage/ActionMenu/ActionMenu
 import MenuIcon from "@mui/icons-material/Menu";
 import { obtenerInformacionPeresonal } from "../../../services/InformacionPersonal/obtenerInformacion";
 import Spinner from "../../../components/spinners/spinner";
+import { useCheckSession } from "../../../services/session/checkSession";
+import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
 
 const ContactsPage = () => {
+
+  const isSessionVerified = useCheckSession();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [informacionPersonal, setInformacionPersonal] = useState(null); // Estado para almacenar la información personal
-  const [loading, setLoading] = useState(true); // Estado para manejar la carga de datos
-  const [error, setError] = useState(null); // Estado para manejar errores
+  const [informacionPersonal, setInformacionPersonal] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -23,7 +26,8 @@ const ContactsPage = () => {
   useEffect(() => {
     const fetchInformacionPersonal = async () => {
       try {
-        const idEmpleado = 1; // Reemplaza con el ID dinámico del empleado, si lo tienes
+        const userData = getLocalStorageData();
+        const idEmpleado = userData.idEmpleado; // Reemplaza con el ID dinámico del empleado
         const data = await obtenerInformacionPeresonal(idEmpleado);
         setInformacionPersonal(data);
       } catch (error) {
@@ -35,10 +39,14 @@ const ContactsPage = () => {
     };
 
     fetchInformacionPersonal();
-  }, []); // Dependencias vacías para ejecutar solo una vez al montar
+  }, []);
+
+  if (!isSessionVerified) {
+    return <Spinner />;
+  }
 
   if (loading) {
-    return <Spinner/>;
+    return <Spinner />;
   }
 
   if (error) {
@@ -58,11 +66,15 @@ const ContactsPage = () => {
       </IconButton>
 
       <Box
+        component="nav"
         sx={{
-          width: { md: "240px" },
-          flexShrink: 0,
+          width: { xs: mobileOpen ? '240px' : 0, md: '240px' },
+          flexShrink: { md: 0 },
           overflowY: "auto",
-          borderRight: "1px solid #ddd",
+          transition: 'width 0.3s',
+          borderRight: { md: "1px solid #ddd" },
+          position: { xs: 'absolute', md: 'relative' },
+          zIndex: 1200,
         }}
       >
         <Sidebar
@@ -71,20 +83,20 @@ const ContactsPage = () => {
         />
       </Box>
 
-      <Box component="main" sx={{ marginLeft: 15, marginTop: 2,  flexGrow: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, ml: { md: "100px" } }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={8} lg={9}>
             <ContactProfile infoPersonal={informacionPersonal} />
           </Grid>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} md={4} lg={3}>
             <ActionsMenu />
           </Grid>
 
-          <Grid item xs={12} md={10} container spacing={3}>
-            <Grid item xs={12} md={7}>
-                <GeneralInformation infoPersonal={informacionPersonal}/>
+          <Grid item xs={12} container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <GeneralInformation infoPersonal={informacionPersonal} />
             </Grid>
-            <Grid item xs={10} md={5}>
+            <Grid item xs={12} md={4}>
               <ContactDetails infoPersonal={informacionPersonal} />
             </Grid>
           </Grid>
