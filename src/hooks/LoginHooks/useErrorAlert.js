@@ -1,10 +1,24 @@
 // hooks/useErrorAlert.js
 import { useState, useEffect, useContext } from "react";
-import AuthContext from "../services/context/AuthContext";
 
-export function useErrorAlert() {
+export function useErrorAlert(error) {
   const [alertVisible, setAlertVisible] = useState(false);
-  const { error } = useContext(AuthContext); 
+
+  useEffect(() => {
+    if (error) {
+      setAlertVisible(true);
+    } else {
+      setAlertVisible(false);
+    }
+  }, [error]);
+
+  return { alertVisible, error };
+}
+
+
+
+export function useErrorAlertTemp(error) {
+  const [alertVisible, setAlertVisible] = useState(false);
   useEffect(() => {
     if (error) {
       setAlertVisible(true);
@@ -16,5 +30,5 @@ export function useErrorAlert() {
     }
   }, [error]);
 
-  return {alertVisible, error };
+  return {alertVisible };
 }

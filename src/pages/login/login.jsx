@@ -8,9 +8,9 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ErrorAlert from "../../components/ErrorAlert/ErrorAlert.jsx";
 import AuthContext from "../../services/context/AuthContext.jsx";
-import { useRedirectLogin } from "../../hooks/RedirectLoginHook.js";
-import { useErrorAlert } from "../../hooks/useErrorAlert.js";
 import { handleClickShowPassword, handleMouseDownPassword, handleSubmit } from "../../services/utils/EventeHandlers/eventHandlersLogin.js";
+import { useRedirectLogin } from "../../hooks/LoginHooks/RedirectLoginHook.js";
+import { useErrorAlertTemp } from "../../hooks/LoginHooks/useErrorAlert.js";
 
 const defaultTheme = createTheme();
 
@@ -18,9 +18,9 @@ export default function SignIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { authenticate, loading } = useContext(AuthContext);
+  const { authenticate, loading, error } = useContext(AuthContext);
   useRedirectLogin();
-  const { alertVisible, error } = useErrorAlert();
+  const { alertVisible } = useErrorAlertTemp(error);
 
   return (
     <ThemeProvider theme={defaultTheme}>

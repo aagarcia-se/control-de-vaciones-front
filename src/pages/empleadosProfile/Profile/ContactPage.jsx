@@ -9,37 +9,19 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { obtenerInformacionPeresonal } from "../../../services/InformacionPersonal/obtenerInformacion";
 import Spinner from "../../../components/spinners/spinner";
 import { useCheckSession } from "../../../services/session/checkSession";
-import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
+import { useInfoEmpleados } from "../../../hooks/EmpleadosHooks/useInfoEmpleados";
+import ErrorAlert from "../../../components/ErrorAlert/ErrorAlert";
+import { useErrorAlert } from "../../../hooks/LoginHooks/useErrorAlert";
 
 const ContactsPage = () => {
-
   const isSessionVerified = useCheckSession();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [informacionPersonal, setInformacionPersonal] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { informacionPersonal, error, loading } = useInfoEmpleados();
+  const { alertVisible } = useErrorAlert(error);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  useEffect(() => {
-    const fetchInformacionPersonal = async () => {
-      try {
-        const userData = getLocalStorageData();
-        const idEmpleado = userData.idEmpleado; // Reemplaza con el ID dinámico del empleado
-        const data = await obtenerInformacionPeresonal(idEmpleado);
-        setInformacionPersonal(data);
-      } catch (error) {
-        console.error("Error al obtener la información personal:", error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInformacionPersonal();
-  }, []);
 
   if (!isSessionVerified) {
     return <Spinner />;
@@ -47,10 +29,6 @@ const ContactsPage = () => {
 
   if (loading) {
     return <Spinner />;
-  }
-
-  if (error) {
-    return <div>Error al cargar la información personal.</div>;
   }
 
   return (
@@ -68,12 +46,12 @@ const ContactsPage = () => {
       <Box
         component="nav"
         sx={{
-          width: { xs: mobileOpen ? '240px' : 0, md: '240px' },
+          width: { xs: mobileOpen ? "240px" : 0, md: "240px" },
           flexShrink: { md: 0 },
           overflowY: "auto",
-          transition: 'width 0.3s',
+          transition: "width 0.3s",
           borderRight: { md: "1px solid #ddd" },
-          position: { xs: 'absolute', md: 'relative' },
+          position: { xs: "absolute", md: "relative" },
           zIndex: 1200,
         }}
       >
@@ -85,21 +63,26 @@ const ContactsPage = () => {
 
       <Box component="main" sx={{ flexGrow: 1, p: 3, ml: { md: "100px" } }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={8} lg={9}>
-            <ContactProfile infoPersonal={informacionPersonal} />
-          </Grid>
-          <Grid item xs={12} md={4} lg={3}>
-            <ActionsMenu />
-          </Grid>
-
-          <Grid item xs={12} container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <GeneralInformation infoPersonal={informacionPersonal} />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <ContactDetails infoPersonal={informacionPersonal} />
-            </Grid>
-          </Grid>
+          {error ? (
+            <ErrorAlert message={error} visible={alertVisible} />
+          ) : (
+            <>
+              <Grid item xs={12} md={8} lg={9}>
+                <ContactProfile infoPersonal={informacionPersonal} />
+              </Grid>
+              <Grid item xs={12} md={4} lg={3}>
+                <ActionsMenu />
+              </Grid>
+              <Grid item xs={12} container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <GeneralInformation infoPersonal={informacionPersonal} />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <ContactDetails infoPersonal={informacionPersonal} />
+                </Grid>
+              </Grid>
+            </>
+          )}
         </Grid>
       </Box>
     </Box>
