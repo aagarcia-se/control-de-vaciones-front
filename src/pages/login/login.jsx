@@ -1,68 +1,26 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
-  Avatar,
-  Button,
-  CssBaseline,
-  TextField,
-  Link,
-  Grid,
-  Box,
-  Typography,
-  Container,
-  Alert,
-  IconButton,
-  InputAdornment,
+  Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, IconButton, InputAdornment,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
+import ErrorAlert from "../../components/ErrorAlert/ErrorAlert.jsx";
 import AuthContext from "../../services/context/AuthContext.jsx";
-import { handleUserRedirect } from "../../services/utils/authHelpers.js";
+import { useRedirectLogin } from "../../hooks/RedirectLoginHook.js";
+import { useErrorAlert } from "../../hooks/useErrorAlert.js";
+import { handleClickShowPassword, handleMouseDownPassword, handleSubmit } from "../../services/utils/EventeHandlers/eventHandlersLogin.js";
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const [alertVisible, setAlertVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-  //variable tipo contexto
-  const { authenticate, loading, error, userData } = useContext(AuthContext);
-
-  useEffect(() => {
-    if (error) {
-      setAlertVisible(true);
-      const timer = setTimeout(() => {
-        setAlertVisible(false);
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [error]);
-
-  // Nuevo useEffect para redirigir cuando userData cambie
-  useEffect(() => {
-    if (userData && Object.keys(userData).length > 0) {
-      handleUserRedirect(navigate, userData);
-    }
-  }, [userData, navigate]);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    await authenticate(username, password);
-  };
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  const { authenticate, loading } = useContext(AuthContext);
+  useRedirectLogin();
+  const { alertVisible, error } = useErrorAlert();
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -82,14 +40,10 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Inicio de sesión
           </Typography>
-          {alertVisible && (
-            <Alert severity="error" sx={{ mb: 2, textAlign: "center" }}>
-              {error}
-            </Alert>
-          )}
+          <ErrorAlert message={error} visible={alertVisible} />
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={(e) => handleSubmit(e, authenticate, username, password)}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -121,7 +75,7 @@ export default function SignIn() {
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
+                      onClick={() => handleClickShowPassword(showPassword, setShowPassword)}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                     >

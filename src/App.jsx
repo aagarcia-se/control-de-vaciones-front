@@ -10,6 +10,7 @@ import DatosGeneralesForm from './pages/empleado/DatosGeneralesForm'
 import EmpleadoNuevoForm from './pages/empleado/EmpleadoNuevoForm'
 import { ReporteEmpleado } from './pages/empleadosReporte/reporteEmpleados'
 import ContactsPage from './pages/empleadosProfile/Profile/ContactPage'
+import HomePage from './pages/empleadosProfile/home/home'
 
 
 
@@ -28,6 +29,7 @@ function App() {
       <Route path='/datos-generales' element={ <DatosGeneralesForm/> }/>
       <Route path='/nuevo-empleado' element={ <EmpleadoNuevoForm/> }/>
       <Route path='/lista-de-empleados' element={ <ReporteEmpleado/> }/>
+      <Route path='/empleados/home' element={ <HomePage/> }/>
       <Route path='/empleados/infoPersonal' element={ <ContactsPage/> }/>
       
     </Routes>

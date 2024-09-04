@@ -10,6 +10,7 @@ import VacationIcon from '@mui/icons-material/BeachAccess'; // Programación de 
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'; // Ícono de cerrar sesión
 import { getLocalStorageData } from '../../../services/session/getLocalStorageData.js';
 import useLogout from '../../../services/session/logout.js';
+import { useNavigate } from 'react-router-dom';
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {
@@ -52,10 +53,12 @@ const LogoutButton = styled(Button)({
 });
 
 const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
+  const navigate = useNavigate(); // Hook para navegación
   const [anchorEl, setAnchorEl] = React.useState(null);
   const userData = getLocalStorageData();
   const userInitial = userData?.primerNombre.charAt(0).toUpperCase();
   const { handleLogout } = useLogout();
+
 
   const handleAvatarClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -84,11 +87,11 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
           </StyledAvatar>
         </AvatarContainer>
         <List>
-          <SidebarListItem button>
+          <SidebarListItem button onClick={() => navigate('/empleados/home')}>
             <ListItemIcon><HomeIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Home" sx={{ color: '#fff' }} />
           </SidebarListItem>
-          <SidebarListItem button>
+          <SidebarListItem button onClick={() => navigate('/empleados/infoPersonal')}>
             <ListItemIcon><ContactsIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Información Personal" sx={{ color: '#fff' }} />
           </SidebarListItem>

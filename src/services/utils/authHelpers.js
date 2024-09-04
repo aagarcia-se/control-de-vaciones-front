@@ -9,7 +9,7 @@ export const handleUserRedirect = (navigate, userData) => {
         navigate("/panel"); // Redirigir al panel de administrador
         break;
       case 4:
-        navigate("/empleados/infoPersonal"); // Redirigir al panel de usuario regular
+        navigate("/empleados/home"); // Redirigir al panel de usuario regular
         break;
       default:
         navigate("/panel"); // Redirigir a un panel general o página predeterminada
