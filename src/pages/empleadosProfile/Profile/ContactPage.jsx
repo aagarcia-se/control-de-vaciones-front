@@ -9,7 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { obtenerInformacionPeresonal } from "../../../services/InformacionPersonal/obtenerInformacion";
 import Spinner from "../../../components/spinners/spinner";
 import { useCheckSession } from "../../../services/session/checkSession";
-import { useInfoEmpleados } from "../../../hooks/EmpleadosHooks/useInfoEmpleados";
+import { useInfoDpi, useInfoEmpleados } from "../../../hooks/EmpleadosHooks/useInfoEmpleados";
 import ErrorAlert from "../../../components/ErrorAlert/ErrorAlert";
 import { useErrorAlert } from "../../../hooks/LoginHooks/useErrorAlert";
 
@@ -18,6 +18,7 @@ const ContactsPage = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { informacionPersonal, error, loading } = useInfoEmpleados();
   const { alertVisible } = useErrorAlert(error);
+  const {infoDpi, errorDpi, loadingDpi} = useInfoDpi();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -27,7 +28,7 @@ const ContactsPage = () => {
     return <Spinner />;
   }
 
-  if (loading) {
+  if (loading || loadingDpi) {
     return <Spinner />;
   }
 
@@ -63,12 +64,12 @@ const ContactsPage = () => {
 
       <Box component="main" sx={{ flexGrow: 1, p: 3, ml: { md: "100px" } }}>
         <Grid container spacing={2}>
-          {error ? (
+          {error || errorDpi ? (
             <ErrorAlert message={error} visible={alertVisible} />
           ) : (
             <>
               <Grid item xs={12} md={8} lg={9}>
-                <ContactProfile infoPersonal={informacionPersonal} />
+                <ContactProfile infoPersonal={informacionPersonal} infoDpi={infoDpi}/>
               </Grid>
               <Grid item xs={12} md={4} lg={3}>
                 <ActionsMenu />

@@ -95,7 +95,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
             <ListItemIcon><ContactsIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Información Personal" sx={{ color: '#fff' }} />
           </SidebarListItem>
-          <SidebarListItem button>
+          <SidebarListItem button onClick={() => navigate('/empleados/family')}>
             <ListItemIcon><PeopleIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Familiares" sx={{ color: '#fff' }} />
           </SidebarListItem>

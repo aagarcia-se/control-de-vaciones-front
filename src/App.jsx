@@ -11,6 +11,7 @@ import EmpleadoNuevoForm from './pages/empleado/EmpleadoNuevoForm'
 import { ReporteEmpleado } from './pages/empleadosReporte/reporteEmpleados'
 import ContactsPage from './pages/empleadosProfile/Profile/ContactPage'
 import HomePage from './pages/empleadosProfile/home/home'
+import FamilyPage from './pages/empleadosProfile/family/FamilyPage'
 
 
 
@@ -31,6 +32,7 @@ function App() {
       <Route path='/lista-de-empleados' element={ <ReporteEmpleado/> }/>
       <Route path='/empleados/home' element={ <HomePage/> }/>
       <Route path='/empleados/infoPersonal' element={ <ContactsPage/> }/>
+      <Route path='/empleados/family' element={ <FamilyPage/> }/>
       
     </Routes>
   )

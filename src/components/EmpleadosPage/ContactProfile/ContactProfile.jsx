@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardContent, Typography, Avatar, IconButton, Grid, styled } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { getLocalStorageData } from '../../../services/session/getLocalStorageData';
 
 // Estilos personalizados
 const ProfileCard = styled(Card)({
@@ -23,17 +22,23 @@ const ProfileContent = styled(CardContent)({
   flex: '1 0 auto',
 });
 
-const ContactProfile = (infoPersonal) => {
+const ContactProfile = ({infoPersonal, infoDpi}) => {
+  // Verificar que infoPersonal e infoDpi existen
+  const nombreCompleto = infoPersonal?.primerNombre && infoPersonal?.primerApellido 
+    ? `${infoPersonal.primerNombre} ${infoPersonal.segundoNombre || ''} ${infoPersonal.primerApellido} ${infoPersonal.segundoApellido || ''}` 
+    : 'Nombre no disponible';
+
+  const numeroDocumento = infoDpi?.numeroDocumento || 'Documento no disponible';
 
   return (
     <ProfileCard>
       <ProfileAvatar src="/path/to/avatar.jpg" />
       <ProfileContent>
         <Typography variant="h5">
-          {`${infoPersonal.infoPersonal.primerNombre} ${infoPersonal.infoPersonal.segundoNombre} ${infoPersonal.infoPersonal.primerApellido} ${infoPersonal.infoPersonal.segundoApellido}`}
+          {nombreCompleto}
         </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Software Engineer - Engineering - link-42
+        <Typography variant="subtitle1" color="text.primary">
+          <strong>Numero de CUI:</strong> {numeroDocumento}
         </Typography>
         <Grid container spacing={2} alignItems="center">
           <Grid item>

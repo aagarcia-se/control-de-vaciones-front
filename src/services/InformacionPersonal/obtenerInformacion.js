@@ -10,3 +10,13 @@ export const obtenerInformacionPeresonal = async (idEmleado) => {
     }
   };
   
+
+  export const obtenerInformacionDpi = async (idEmleado) => {
+    try {
+      const response = await api.get(`${endpoints.getInfoDpi}/${idEmleado}`)
+      return response.data.dpiData;
+    } catch (error) {
+      throw error;
+    }
+  };
+  
