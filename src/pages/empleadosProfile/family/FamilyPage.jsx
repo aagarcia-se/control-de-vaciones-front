@@ -13,11 +13,6 @@ import { useInfoFamiliares } from "../../../hooks/EmpleadosHooks/useInfoFamiliar
 import { useErrorAlert } from "../../../hooks/LoginHooks/useErrorAlert";
 import ErrorAlert from "../../../components/ErrorAlert/ErrorAlert";
 
-const familiaresEjemplo = [
-  { idFamiliar: 1, nombreFamiliar: "Julian Alvarez", telefono: "57895496", parentesco: "Hermano (a)", fechaNacimiento: "1997-05-12" },
-  { idFamiliar: 2, nombreFamiliar: "Ana Maria Perez", telefono: "56873213", parentesco: "Madre", fechaNacimiento: "1972-11-24" },
-  { idFamiliar: 3, nombreFamiliar: "Carlos Perez", telefono: "55879321", parentesco: "Padre", fechaNacimiento: "1970-08-14" }
-];
 
 const FamilyPage = () => {
   const isSessionVerified = useCheckSession();
@@ -46,8 +41,8 @@ const FamilyPage = () => {
   };
 
   const handleAddFamiliar = () => {
-    setFamiliares([...familiares, { ...nuevoFamiliar, idFamiliar: familiares.length + 1 }]);
-    handleCloseModal();
+    /*setFamiliares([...familiares, { ...nuevoFamiliar, idFamiliar: familiares.length + 1 }]);
+    handleCloseModal();*/
   };
 
 
