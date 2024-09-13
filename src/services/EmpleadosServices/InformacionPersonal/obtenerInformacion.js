@@ -1,5 +1,5 @@
-import api from '../../config/api.js'
-import endpoints from '../../config/endpoints.js'
+import api from '../../../config/api.js'
+import endpoints from '../../../config/endpoints.js'
 
 export const obtenerInformacionPeresonal = async (idEmleado) => {
     try {

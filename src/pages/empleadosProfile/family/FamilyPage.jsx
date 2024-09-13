@@ -9,6 +9,9 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Spinner from "../../../components/spinners/spinner";
 import { useCheckSession } from "../../../services/session/checkSession";
+import { useInfoFamiliares } from "../../../hooks/EmpleadosHooks/useInfoFamiliares";
+import { useErrorAlert } from "../../../hooks/LoginHooks/useErrorAlert";
+import ErrorAlert from "../../../components/ErrorAlert/ErrorAlert";
 
 const familiaresEjemplo = [
   { idFamiliar: 1, nombreFamiliar: "Julian Alvarez", telefono: "57895496", parentesco: "Hermano (a)", fechaNacimiento: "1997-05-12" },
@@ -18,10 +21,11 @@ const familiaresEjemplo = [
 
 const FamilyPage = () => {
   const isSessionVerified = useCheckSession();
+  const { familiares, error, loading } = useInfoFamiliares();
+  const { alertVisible } = useErrorAlert(error);
+
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [familiares, setFamiliares] = useState(familiaresEjemplo);
+  //const [familiares, setFamiliares] = useState(familiaresEjemplo);
   const [modalOpen, setModalOpen] = useState(false);
   const [nuevoFamiliar, setNuevoFamiliar] = useState({
     nombreFamiliar: "",
@@ -46,9 +50,7 @@ const FamilyPage = () => {
     handleCloseModal();
   };
 
-  useEffect(() => {
-    setLoading(false);
-  }, []);
+
 
   if (!isSessionVerified) {
     return <Spinner />;
@@ -58,9 +60,6 @@ const FamilyPage = () => {
     return <Spinner />;
   }
 
-  if (error) {
-    return <div>Error al cargar la información personal.</div>;
-  }
 
   return (
     <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f1f3f4" }}>
@@ -111,7 +110,7 @@ const FamilyPage = () => {
         </Button>
 
         <Grid container spacing={3} >
-          {familiares.length > 0 ? (
+          {!error ? (
             familiares.map((familiar) => (
               <Grid item xs={12} sm={6} md={4} key={familiar.idFamiliar} sx={{  marginBottom: "40px" }}>
                 <Card
@@ -159,7 +158,9 @@ const FamilyPage = () => {
               </Grid>
             ))
           ) : (
-            <Typography>No hay familiares registrados.</Typography>
+            <Grid sx={{mt: 3}}>
+            <ErrorAlert message={error} visible={alertVisible} />;
+            </Grid>
           )}
         </Grid>
 

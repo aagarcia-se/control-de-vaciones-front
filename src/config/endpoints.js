@@ -2,7 +2,8 @@
 const endpoints = {
     login: '/login',
     getInfoPeresonal: '/obtenerInfoPersonal',
-    getInfoDpi: '/infoDpi'
+    getInfoDpi: '/infoDpi',
+    GET_FAMILIARES: '/obtenerFamiliares'
 };
 
 export default endpoints;

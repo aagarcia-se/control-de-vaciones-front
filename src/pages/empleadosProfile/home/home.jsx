@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Box, Grid, IconButton } from "@mui/material";
 import Sidebar from "../../../components/EmpleadosPage/SideBar/SideBar";
 import MenuIcon from "@mui/icons-material/Menu";
-import { obtenerInformacionPeresonal } from "../../../services/InformacionPersonal/obtenerInformacion";
 import Spinner from "../../../components/spinners/spinner";
 import { useCheckSession } from "../../../services/session/checkSession";
 

@@ -6,7 +6,7 @@ import ContactDetails from "../../../components/EmpleadosPage/ContactDetails/Con
 import GeneralInformation from "../../../components/EmpleadosPage/GeneralInformation/GeneralInformation";
 import ActionsMenu from "../../../components/EmpleadosPage/ActionMenu/ActionMenu";
 import MenuIcon from "@mui/icons-material/Menu";
-import { obtenerInformacionPeresonal } from "../../../services/InformacionPersonal/obtenerInformacion";
+import { obtenerInformacionPeresonal } from "../../../services/EmpleadosServices/InformacionPersonal/obtenerInformacion";
 import Spinner from "../../../components/spinners/spinner";
 import { useCheckSession } from "../../../services/session/checkSession";
 import { useInfoDpi, useInfoEmpleados } from "../../../hooks/EmpleadosHooks/useInfoEmpleados";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { obtenerInformacionDpi, obtenerInformacionPeresonal } from "../../services/InformacionPersonal/obtenerInformacion";
+import { obtenerInformacionDpi, obtenerInformacionPeresonal } from "../../services/EmpleadosServices/InformacionPersonal/obtenerInformacion";
 import { getLocalStorageData } from "../../services/session/getLocalStorageData";
 
 export function useInfoEmpleados() {
