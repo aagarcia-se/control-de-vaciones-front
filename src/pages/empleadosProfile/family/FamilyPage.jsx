@@ -57,7 +57,7 @@ const FamilyPage = () => {
 
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f1f3f4" }}>
+    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#eee9df" }}>
       <IconButton
         color="inherit"
         aria-label="open drawer"
@@ -88,7 +88,7 @@ const FamilyPage = () => {
 
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, ml: { md: "100px" }, backgroundColor: "#f9fafc", mt:2 }}
+        sx={{ flexGrow: 1, p: 3, ml: { md: "100px" }, backgroundColor: "#eee9df", mt:2 }}
       >
         <Typography variant="h4" gutterBottom sx={{ mb: 4, color: "#09098a" }}>
           Familiares
@@ -154,7 +154,7 @@ const FamilyPage = () => {
             ))
           ) : (
             <Grid sx={{mt: 3}}>
-            <ErrorAlert message={error} visible={alertVisible} />;
+            <ErrorAlert message={error} visible={alertVisible} />
             </Grid>
           )}
         </Grid>

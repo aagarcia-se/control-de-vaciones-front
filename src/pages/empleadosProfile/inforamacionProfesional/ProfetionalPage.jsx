@@ -55,7 +55,7 @@ const ProfetionalPage = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f1f3f4" }}>
+    <Box sx={{ display: "flex", height: "110vh", backgroundColor: "#eee9df" }}>
       {/* Sidebar */}
       <Box
         component="nav"
@@ -73,12 +73,12 @@ const ProfetionalPage = () => {
       </Box>
 
       {/* Main Content */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, paddingLeft: 10 }}>
         <Typography variant="h4" gutterBottom>
           Información Profesional
         </Typography>
 
-        <Grid container spacing={3} sx={{mt: 3}}>
+        <Grid container spacing={3} sx={{mt: 2}}>
           {/* Nivel Educativo */}
           <Grid item xs={12} md={6} lg={8}>
             <Card sx={{ display: 'flex', alignItems: 'center' }}>
@@ -140,7 +140,7 @@ const ProfetionalPage = () => {
           </Grid>
 
           {/* Fecha de Colegiación */}
-          <Grid item xs={12} md={6} lg={8} sx={{paddingBottom: 4}}>
+          <Grid item xs={12} md={6} lg={8} sx={{}}>
             <Card sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar sx={{ bgcolor: '#3949ab', margin: 1 }}>
                 <EventIcon />

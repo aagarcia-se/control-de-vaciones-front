@@ -33,7 +33,7 @@ const ContactsPage = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f1f3f4" }}>
+    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#eee9df" }}>
       <IconButton
         color="inherit"
         aria-label="open drawer"

@@ -9,6 +9,10 @@ import { CssBaseline } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./services/context/AuthContext.jsx";
 
+import './styles/App.css'; // Actualiza la ruta según la ubicación de tu archivo CSS
+
+
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <CssBaseline />

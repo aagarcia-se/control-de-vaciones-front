@@ -15,6 +15,9 @@ import FamilyPage from './pages/empleadosProfile/family/FamilyPage'
 import ProfetionalPage from './pages/empleadosProfile/inforamacionProfesional/ProfetionalPage'
 
 
+import './styles/App.css'; // Actualiza la ruta según la ubicación de tu archivo CSS
+
+
 
 
 function App() {
