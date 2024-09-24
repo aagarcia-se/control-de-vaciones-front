@@ -11,11 +11,11 @@ export function useInfoEmpleados() {
     const fetchInformacionPersonal = async () => {
       try {
         const userData = getLocalStorageData();
-        if (!userData || !userData.idEmpleado) {
+        if (!userData || !userData.idInfoPersonal) {
           throw new Error("ID de empleado no encontrado en el localStorage.");
         }
-        const idEmpleado = userData.idEmpleado;
-        const data = await obtenerInformacionPeresonal(idEmpleado);
+        const idInfoPersonal = userData.idInfoPersonal;
+        const data = await obtenerInformacionPeresonal(idInfoPersonal);
         setInformacionPersonal(data);
       } catch (error) {
         // Verifica si error existe y tiene una propiedad message
@@ -54,11 +54,11 @@ export function useInfoDpi() {
     const fetchInformacionDpi = async () => {
       try {
         const userData = getLocalStorageData();
-        if (!userData || !userData.idEmpleado) {
+        if (!userData || !userData.idDpi) {
           throw new Error("ID de empleado no encontrado en el localStorage.");
         }
-        const idEmpleado = userData.idEmpleado;
-        const dataDpi = await obtenerInformacionDpi(idEmpleado);
+        const  idDpi = userData.idDpi;
+        const dataDpi = await obtenerInformacionDpi(idDpi);
         setInfoDpi(dataDpi);
       } catch (error) {
         // Verifica si error existe y tiene una propiedad message

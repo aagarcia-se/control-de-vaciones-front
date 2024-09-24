@@ -113,6 +113,7 @@ function EmpleadoForm() {
       );
 
       if (response.status === 200) {
+        localStorage.removeItem('datosEmpleado');
         setAlertVisible(true);
         setTimeout(() => {
           setAlertVisible(false);

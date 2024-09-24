@@ -1,52 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { Box, Grid, Typography, Card, CardContent, Avatar } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  Card,
+  CardContent,
+  Avatar,
+} from "@mui/material";
 import Sidebar from "../../../components/EmpleadosPage/SideBar/SideBar";
-import MenuIcon from "@mui/icons-material/Menu";
 import SchoolIcon from "@mui/icons-material/School";
 import WorkIcon from "@mui/icons-material/Work";
 import BadgeIcon from "@mui/icons-material/Badge";
 import EventIcon from "@mui/icons-material/Event";
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import Spinner from "../../../components/spinners/spinner";
 import { useCheckSession } from "../../../services/session/checkSession";
 import axios from "axios";
+import { useNivelEducativo } from "../../../hooks/EmpleadosHooks/useNivelEducativo";
+import { useErrorAlert } from "../../../hooks/LoginHooks/useErrorAlert";
 
-const fakeData = {
-  idNivelEducativo: 1,
-  idInfoPersonal: 45,
-  nivelDeEstudios: "Licenciatura en Ingeniería",
-  ultimoNivelAlcanzado: "Tesis",
-  profesion: "Ingeniero en Sistemas",
-  numeroColegiado: "12345",
-  fechaColegiacion: "2020-05-15"
-};
 
 const ProfetionalPage = () => {
   const isSessionVerified = useCheckSession();
+  const { nivelEducativo, error, loading } = useNivelEducativo();
+  const { alertVisible } = useErrorAlert(error);
+
+  console.log(nivelEducativo)
+
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [data, setData] = useState(fakeData); // Usamos datos fake por ahora.
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/profesional"); // Aquí va tu endpoint real
-        setData(response.data); // Reemplaza los datos fake cuando los recibas
-        setLoading(false);
-      } catch (err) {
-        setError("Error al cargar la información profesional.");
-        setLoading(false);
-      }
-    };
-    // Comentar esta línea mientras consumes datos fake
-    // fetchData();
-  }, []);
 
-  if (!isSessionVerified) {
+  if (loading || !isSessionVerified) {
     return <Spinner />;
   }
 
@@ -69,26 +57,32 @@ const ProfetionalPage = () => {
           zIndex: 1200,
         }}
       >
-        <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
+        <Sidebar
+          mobileOpen={mobileOpen}
+          handleDrawerToggle={handleDrawerToggle}
+        />
       </Box>
 
       {/* Main Content */}
       <Box component="main" sx={{ flexGrow: 1, p: 3, paddingLeft: 10 }}>
+        
         <Typography variant="h4" gutterBottom>
           Información Profesional
         </Typography>
 
-        <Grid container spacing={3} sx={{mt: 2}}>
+        <Grid container spacing={3} sx={{ mt: 2 }}>
           {/* Nivel Educativo */}
           <Grid item xs={12} md={6} lg={8}>
-            <Card sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar sx={{ bgcolor: '#1976d2', margin: 1 }}>
+            <Card sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar sx={{ bgcolor: "#1976d2", margin: 1 }}>
                 <SchoolIcon />
               </Avatar>
-              <CardContent sx={{ flex: '1 0 auto' }}>
+              <CardContent sx={{ flex: "1 0 auto" }}>
                 <Typography variant="h6">Nivel Educativo</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {data.nivelDeEstudios}
+                <Typography variant="body2" sx={{color: "#380555"}}>
+                  {nivelEducativo
+                    ? nivelEducativo.nivelDeEstudios
+                    : "Sin Datos"}
                 </Typography>
               </CardContent>
             </Card>
@@ -96,63 +90,89 @@ const ProfetionalPage = () => {
 
           {/* Último Nivel Alcanzado */}
           <Grid item xs={12} md={6} lg={8}>
-            <Card sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar sx={{ bgcolor: '#388e3c', margin: 1 }}>
+            <Card sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar sx={{ bgcolor: "#388e3c", margin: 1 }}>
                 <BadgeIcon />
               </Avatar>
-              <CardContent sx={{ flex: '1 0 auto' }}>
+              <CardContent sx={{ flex: "1 0 auto" }}>
                 <Typography variant="h6">Último Nivel Alcanzado</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {data.ultimoNivelAlcanzado}
+                <Typography variant="body2" color="text.secondary" sx={{color: "#380555"}}>
+                  {nivelEducativo
+                    ? nivelEducativo.ultimoNivelAlcanzado
+                    : "Sin datos"}
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
 
-          {/* Profesión */}
+          {/* Último Nivel Alcanzado */}
           <Grid item xs={12} md={6} lg={8}>
-            <Card sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar sx={{ bgcolor: '#f57c00', margin: 1 }}>
-                <WorkIcon />
+            <Card sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar sx={{ bgcolor: "#d9c911", margin: 1 }}>
+                <EditCalendarIcon />
               </Avatar>
-              <CardContent sx={{ flex: '1 0 auto' }}>
-                <Typography variant="h6">Profesión</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {data.profesion}
+              <CardContent sx={{ flex: "1 0 auto" }}>
+                <Typography variant="h6">
+                  Año del ultimo nivel alcanzado
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{color: "#380555"}}>
+                  {nivelEducativo
+                    ? new Date(
+                        nivelEducativo.añoUltimoNivelCursado
+                      ).getFullYear()
+                    : "Sin datos"}
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
 
-          {/* Número Colegiado */}
+          {nivelEducativo && nivelEducativo.profesion && (
+            <Grid item xs={12} md={6} lg={8}>
+              <Card sx={{ display: "flex", alignItems: "center" }}>
+                <Avatar sx={{ bgcolor: "#f57c00", margin: 1 }}>
+                  <WorkIcon />
+                </Avatar>
+                <CardContent sx={{ flex: "1 0 auto" }}>
+                  <Typography variant="h6">Profesión</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{color: "#380555"}}>
+                    {nivelEducativo ? nivelEducativo.profesion : "Sin datos"}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
+
+          {nivelEducativo && nivelEducativo.numeroColegiado && (
           <Grid item xs={12} md={6} lg={8}>
-            <Card sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar sx={{ bgcolor: '#e53935', margin: 1 }}>
+            <Card sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar sx={{ bgcolor: "#e53935", margin: 1 }}>
                 <BadgeIcon />
               </Avatar>
-              <CardContent sx={{ flex: '1 0 auto' }}>
+              <CardContent sx={{ flex: "1 0 auto" }}>
                 <Typography variant="h6">Número Colegiado</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {data.numeroColegiado || "N/A"}
+                <Typography variant="body2" color="text.secondary" sx={{color: "#380555"}}>
+                  {nivelEducativo && nivelEducativo.numeroColegiado ? nivelEducativo.numeroColegiado : "N/A"}
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
+          )}
 
-          {/* Fecha de Colegiación */}
+          {nivelEducativo && nivelEducativo.fechaColegiacion && (
           <Grid item xs={12} md={6} lg={8} sx={{}}>
-            <Card sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar sx={{ bgcolor: '#3949ab', margin: 1 }}>
+            <Card sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar sx={{ bgcolor: "#3949ab", margin: 1 }}>
                 <EventIcon />
               </Avatar>
-              <CardContent sx={{ flex: '1 0 auto' }}>
+              <CardContent sx={{ flex: "1 0 auto" }}>
                 <Typography variant="h6">Fecha de Colegiación</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {new Date(data.fechaColegiacion).toLocaleDateString()}
+                <Typography variant="body2" color="text.secondary" sx={{color: "#380555"}}>
+                  {nivelEducativo && nivelEducativo.fechaColegiacion ? nivelEducativo.fechaColegiacion : "No existe"}
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
+          )}
         </Grid>
       </Box>
     </Box>
