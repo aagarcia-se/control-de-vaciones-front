@@ -12,10 +12,10 @@ export function useInfoFamiliares() {
       const fetchFamiliares = async () => {
         try {
           const userData = getLocalStorageData();
-          if (!userData || !userData.idEmpleado) {
+          if (!userData || !userData.idInfoPersonal) {
             throw new Error("ID de empleado no encontrado en el localStorage.");
           }
-          const idEmpleado = userData.idEmpleado;
+          const idEmpleado = userData.idInfoPersonal;
           const data = await obtenerFamiliares(idEmpleado);
           setFamiliares(data);
         } catch (error) {

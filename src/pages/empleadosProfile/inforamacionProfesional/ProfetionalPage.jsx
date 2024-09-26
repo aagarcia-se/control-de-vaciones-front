@@ -25,8 +25,6 @@ const ProfetionalPage = () => {
   const { nivelEducativo, error, loading } = useNivelEducativo();
   const { alertVisible } = useErrorAlert(error);
 
-  console.log(nivelEducativo)
-
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
