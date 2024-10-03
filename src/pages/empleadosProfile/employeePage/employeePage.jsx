@@ -23,16 +23,18 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import { deepPurple } from "@mui/material/colors";
 import { useDatosLaborales } from "../../../hooks/EmpleadosHooks/useDatosLaboales";
+import { useCheckSession } from "../../../services/session/checkSession";
 
 const EmployeePage = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { datosLaborales, error, loading } = useDatosLaborales();
+  const isSessionVerified = useCheckSession();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  if (loading) {
+  if (loading || !isSessionVerified) {
     return <Spinner />;
   }
 
