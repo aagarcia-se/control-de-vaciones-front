@@ -99,7 +99,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
             <ListItemIcon><PeopleIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Familiares" sx={{ color: '#fff' }} />
           </SidebarListItem>
-          <SidebarListItem button>
+          <SidebarListItem button onClick={() => navigate('/empleados/informacion-laboral')}>
             <ListItemIcon><WorkIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Datos Laborales" sx={{ color: '#fff' }} />
           </SidebarListItem>
@@ -107,7 +107,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
             <ListItemIcon><SchoolIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Informacion Profesional" sx={{ color: '#fff' }} />
           </SidebarListItem>
-          <SidebarListItem button>
+          <SidebarListItem button onClick={() => navigate('/empleados/informacion-General')}>
             <ListItemIcon><InfoIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Datos Generales" sx={{ color: '#fff' }} />
           </SidebarListItem>

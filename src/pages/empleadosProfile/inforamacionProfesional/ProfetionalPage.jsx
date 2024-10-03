@@ -15,7 +15,6 @@ import EventIcon from "@mui/icons-material/Event";
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import Spinner from "../../../components/spinners/spinner";
 import { useCheckSession } from "../../../services/session/checkSession";
-import axios from "axios";
 import { useNivelEducativo } from "../../../hooks/EmpleadosHooks/useNivelEducativo";
 import { useErrorAlert } from "../../../hooks/LoginHooks/useErrorAlert";
 
@@ -23,6 +22,7 @@ import { useErrorAlert } from "../../../hooks/LoginHooks/useErrorAlert";
 const ProfetionalPage = () => {
   const isSessionVerified = useCheckSession();
   const { nivelEducativo, error, loading } = useNivelEducativo();
+  
   const { alertVisible } = useErrorAlert(error);
 
   const [mobileOpen, setMobileOpen] = useState(false);
