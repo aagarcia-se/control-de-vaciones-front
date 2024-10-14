@@ -94,7 +94,7 @@ const FamilyPage = () => {
           Familiares
         </Typography>
 
-        <Button
+        {/* <Button
           variant="contained"
           color="success"
           startIcon={<AddIcon />}
@@ -102,7 +102,7 @@ const FamilyPage = () => {
           onClick={handleOpenModal}
         >
           Añadir Familiar
-        </Button>
+        </Button> */}
 
         <Grid container spacing={3} >
           {!error ? (

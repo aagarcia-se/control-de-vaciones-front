@@ -18,6 +18,8 @@ import ProfetionalPage from './pages/empleadosProfile/inforamacionProfesional/Pr
 import './styles/App.css'; // Actualiza la ruta según la ubicación de tu archivo CSS
 import GeneralInfoPage from './pages/empleadosProfile/InformacionGeneral/GeneralInfo'
 import EmployeePage from './pages/empleadosProfile/employeePage/employeePage'
+import VacationApp from './pages/empleadosProfile/Vacations/VacationPage'
+import ProgramarVacacionesPage from './pages/empleadosProfile/Vacations/ProgramarVacacionesPage'
 
 
 
@@ -43,6 +45,8 @@ function App() {
       <Route path='/empleados/informacion-profesional' element={ <ProfetionalPage/> }/>
       <Route path='/empleados/informacion-General' element={ <GeneralInfoPage/> }/>
       <Route path='/empleados/informacion-laboral' element={ <EmployeePage/> }/>
+      <Route path='/empleados/programar-vacaciones' element={ <VacationApp/> }/>
+      <Route path='/empleados/programar-fecha' element={ <ProgramarVacacionesPage/> }/>
       
     </Routes>
   )

@@ -15,7 +15,6 @@ export const ReporteEmpleado = () => {
   const getData = async () => {
     try {
       const response = await axios.get(endpoint);
-      console.log(response.data.responseData.emplloyeesList);
       const data = response.data.responseData.emplloyeesList; // Corregido el nombre de la propiedad
       setEmpleados(data);
     } catch (error) {

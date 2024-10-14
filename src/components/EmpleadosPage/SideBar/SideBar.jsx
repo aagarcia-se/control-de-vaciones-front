@@ -111,7 +111,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
             <ListItemIcon><InfoIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Datos Generales" sx={{ color: '#fff' }} />
           </SidebarListItem>
-          <SidebarListItem button>
+          <SidebarListItem button onClick={() => navigate('/empleados/programar-vacaciones')}>
             <ListItemIcon><VacationIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Programar Vacaciones" sx={{ color: '#fff' }} />
           </SidebarListItem>

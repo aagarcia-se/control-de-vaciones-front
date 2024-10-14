@@ -61,7 +61,6 @@ function NivelEducativoForm() {
       try {
         const response = await axios.get("http://localhost:3000/api/nivelEducativo");
         setNivelesEducativos(response.data.nivelEducativo);
-        console.log(response);
       } catch (error) {
         console.error("Error al obtener los niveles educativos:", error);
       }
@@ -87,7 +86,6 @@ function NivelEducativoForm() {
         fechaColegiacionToSend,
       };
 
-      console.log(payload)
       const response = await axios.post(
         "http://localhost:3000/api/ingresarNivelEducativo",
         payload

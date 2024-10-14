@@ -97,9 +97,6 @@ const PersonalInfoForm = () => {
     // Filtrar municipios basados en el departamento seleccionado
     const minId = departamentoId * 100;
     const maxId = (departamentoId + 1) * 100;
-    console.log(departamentoId);
-    console.log(minId);
-    console.log(maxId);
     const filteredMunicipios = municipios.filter(
       (municipio) =>
         municipio.idMunicipio >= minId && municipio.idMunicipio < maxId
@@ -112,7 +109,6 @@ const PersonalInfoForm = () => {
     setLoading(true);
     setError(null);
     try {
-      console.log(idDpi);
       // Enviar la información al servidor
       const data = await axios.post("http://localhost:3000/api/infoPersonalEmpleado", {
         primerNombre,
@@ -141,7 +137,6 @@ const PersonalInfoForm = () => {
         if (storedData) {
           const datosEmpleado = JSON.parse(storedData);
           datosEmpleado.idInfoPersonal = idInfoPersonal;
-          console.log(datosEmpleado);
           localStorage.setItem("datosEmpleado", JSON.stringify(datosEmpleado));
         }
 
