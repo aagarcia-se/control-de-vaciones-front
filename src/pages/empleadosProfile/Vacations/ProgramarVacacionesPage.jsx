@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   IconButton,
@@ -14,7 +14,8 @@ import Spinner from "../../../components/spinners/spinner";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"; 
 import { useCheckSession } from "../../../services/session/checkSession";
 import dayjs from "dayjs";
-import { isHoliday, calculateBusinessDays } from "../../../services/utils/dates/vacationUtils.js";
+import { isHoliday, calculateBusinessDays, loadDiasFestivos } from "../../../services/utils/dates/vacationUtils.js";
+import { getDiasFestivos } from "../../../services/EmpleadosServices/DiasFestivos/GetDiasFestivos.js";
 
 const ProgramarVacacionesPage = () => {
   const isSessionVerified = useCheckSession();
@@ -23,7 +24,16 @@ const ProgramarVacacionesPage = () => {
   const [endDate, setEndDate] = useState("");
   const [nextWorkDate, setNextWorkDate] = useState("");
   const [error, setError] = useState("");
-  
+
+  useEffect(() => {
+    // Cargar los días festivos al montar el componente
+    const fetchHolidays = async () => {
+      await loadDiasFestivos(getDiasFestivos);
+    };
+    fetchHolidays();
+  }, []);
+
+
   const today = dayjs().format("YYYY-MM-DD");
   
   // Límite superior de la fecha de inicio: 20 días antes del 30 de noviembre
@@ -152,7 +162,7 @@ const ProgramarVacacionesPage = () => {
             <Grid item xs={12}>
               {startDate && endDate && (
                 <Typography variant="body1" align="center">
-                  <strong>Días programados:</strong> {programmedDays}
+                  <strong>Días habilies programados:</strong> {programmedDays}
                 </Typography>
               )}
               <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
