@@ -14,8 +14,8 @@ import Spinner from "../../../components/spinners/spinner";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"; 
 import { useCheckSession } from "../../../services/session/checkSession";
 import dayjs from "dayjs";
-import { isHoliday, calculateBusinessDays, loadDiasFestivos } from "../../../services/utils/dates/vacationUtils.js";
-import { getDiasFestivos } from "../../../services/EmpleadosServices/DiasFestivos/GetDiasFestivos.js";
+import { isHoliday, calculateBusinessDays } from "../../../services/utils/dates/vacationUtils.js";
+import useDiasFestivos from "../../../hooks/DiasFestivos/useDiasFestivos.js";
 
 const ProgramarVacacionesPage = () => {
   const isSessionVerified = useCheckSession();
@@ -25,13 +25,7 @@ const ProgramarVacacionesPage = () => {
   const [nextWorkDate, setNextWorkDate] = useState("");
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    // Cargar los días festivos al montar el componente
-    const fetchHolidays = async () => {
-      await loadDiasFestivos(getDiasFestivos);
-    };
-    fetchHolidays();
-  }, []);
+  const { isLoading, errorDF } = useDiasFestivos(); // Usa el custom hook
 
 
   const today = dayjs().format("YYYY-MM-DD");
@@ -84,7 +78,7 @@ const ProgramarVacacionesPage = () => {
     }
   };
 
-  if (!isSessionVerified) {
+  if (!isSessionVerified || !isLoading) {
     return <Spinner />;
   }
 
