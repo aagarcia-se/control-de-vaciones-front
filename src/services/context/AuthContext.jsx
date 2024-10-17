@@ -17,9 +17,14 @@ const AuthProvider = ({ children }) => {
         setUserData(response.userLogin.userData);                                                          
         localStorage.setItem('userData', JSON.stringify(response.userLogin.userData));    
     } catch (err) {
-      setError(
-        "Usuario o contraseña incorrectos. Por favor, inténtalo de nuevo."
-      );
+      console.log(err)
+      if(err && err.message && err.response.status === 500){
+        setError("Servicio no disponible, intente más tarde");
+      }else if (err  && err.response.data.userLogin.codErr){
+        setError("Usuario o contraseña incorrectos. Por favor, inténtalo de nuevo.");
+      }else{
+        setError("Ha Ocurrido un error");
+      }
     } finally {
       setLoading(false);
     }

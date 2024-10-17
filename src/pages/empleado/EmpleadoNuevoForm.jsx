@@ -217,7 +217,7 @@ function EmpleadoForm() {
                   label="Unidad"
                 >
                   {unidades.map((u) => (
-                    <MenuItem key={u.idUnidad} value={u.acronimo}>
+                    <MenuItem key={u.idUnidad} value={u.nombreUnidad}>
                       {u.nombreUnidad}
                     </MenuItem>
                   ))}
