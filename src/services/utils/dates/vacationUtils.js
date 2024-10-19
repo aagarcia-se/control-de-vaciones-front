@@ -1,6 +1,9 @@
 import dayjs from "dayjs";
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 
 let diasFestivos = []; // Variable para almacenar los días festivos obtenidos de la API (Variable global)
+// Registrar el plugin
+dayjs.extend(isSameOrAfter);
 
 // Llamada a la API para obtener los días festivos
 export const loadDiasFestivos = async (getDiasFestivos) => {
@@ -82,3 +85,13 @@ export const esDiaLaboral = (fecha) => {
   const dia = dayjs(fecha).day();
   return dia !== 0 && dia !== 6; // 0: Domingo, 6: Sábado
 };
+
+//Funcion para determinar si la fecha de hoy es mayor a la fecha de vencimiento de vacaciones
+export const validarFechaFin = (fechaFin) => {
+  const today = dayjs().startOf('day'); // Fecha de hoy sin hora
+  const fechaFinWithFormat = dayjs(fechaFin).startOf('day'); // Fecha de BD sin hora
+
+  // Verificar si hoy es mayor que la fecha de BD
+  return today.isSameOrAfter(fechaFinWithFormat, 'day');
+};
+

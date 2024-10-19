@@ -8,7 +8,8 @@ const endpoints = {
     GET_DATOS_MEDIOS: '/obtenerDatosMedicos',
     GET_DATOS_SOLI: '/obtenerInfoSoli',
     GET_DATOS_LABORALES: '/ObtenerdatosLaborales',
-    GET_DIAS_FESTIVOS_C: '/getDiasFestivos'
+    GET_DIAS_FESTIVOS_C: '/getDiasFestivos',
+    GET_SOLICITUDBYID_VACACIONES: '/solicitudesById'
 };
 
 export default endpoints;

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// VacationApp.js
+import React, { useEffect, useState } from "react";
 import {
   Box,
   IconButton,
@@ -12,106 +13,66 @@ import {
   TableRow,
   Paper,
   Alert,
+  Chip,
 } from "@mui/material";
 import Sidebar from "../../../components/EmpleadosPage/SideBar/SideBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Spinner from "../../../components/spinners/spinner";
 import { useCheckSession } from "../../../services/session/checkSession";
 import { useNavigate } from "react-router-dom";
-import SignatureCanvas from "react-signature-canvas"; // Para la firma
-import axios from "axios"; // Para el consumo del endpoint
+import { useSolicitudById } from "../../../hooks/VacationAppHooks/useSolicitudById";
+import ErrorAlert from "../../../components/ErrorAlert/ErrorAlert";
+import { validarFechaFin } from "../../../services/utils/dates/vacationUtils"; 
+import { useFinalizarEstado } from "../../../hooks/VacationAppHooks/useFinalizarEstado";
+
+// Mapeo de colores y etiquetas para los estados
+const estadoStyles = {
+  enviada: { color: "#90caf9", label: "Solicitud Enviada" },
+  revisión: { color: "#d9c611", label: "Solicitud en revisión" },
+  autorizadas: { color: "#a5d6a7", label: "Solicitud autorizada" },
+  rechazada: { color: "#ef9a9a", label: "Solicitud rechazada" },
+  finalizadas: { color: "#e483d3", label: "Vacaciones finalizadas" },
+};
 
 const VacationApp = () => {
-  const isSessionVerified = useCheckSession(); // 1. Hook
-  const [mobileOpen, setMobileOpen] = useState(false); // 2. Hook
-  const [vacationData, setVacationData] = useState(null); // 3. Hook
-  const navigate = useNavigate(); // 4. Hook
-  const [signature, setSignature] = useState(null); // 5. Hook
+  const isSessionVerified = useCheckSession();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { solicitud, errorS, loadingS } = useSolicitudById();
+  const navigate = useNavigate();
+  useFinalizarEstado(solicitud);
 
-  // Referencia para el recuadro de firma
-  const signatureRef = React.useRef(); // 6. Hook
-
-  // Llamar al endpoint para obtener los datos de gestión de vacaciones
-  useEffect(() => {
-    const fetchVacationData = async () => {
-      try {
-        const response = await axios.get("/api/vacation-data"); // Modifica el endpoint según tu API
-        setVacationData(response.data);
-      } catch (error) {
-        console.error("Error al obtener los datos de vacaciones:", error);
-      }
-    };
-    fetchVacationData();
-  }, []); // 7. Hook
 
   if (!isSessionVerified) {
     return <Spinner />;
   }
 
-  const handleSaveSignature = async () => {
-    if (signatureRef.current) {
-      const signatureDataURL = signatureRef.current.getTrimmedCanvas().toDataURL("image/png");
-      setSignature(signatureDataURL);
-  
-      // Crear un nuevo canvas para redimensionar la imagen
-      const img = new Image();
-      img.src = signatureDataURL;
-  
-      img.onload = async () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-  
-        // Establecer el nuevo tamaño (ajusta el ancho y alto según tus necesidades)
-        const MAX_WIDTH = 800; // ancho máximo
-        const MAX_HEIGHT = 600; // altura máxima
-        let width = img.width;
-        let height = img.height;
-  
-        // Redimensionar la imagen manteniendo la proporción
-        if (width > height) {
-          if (width > MAX_WIDTH) {
-            height *= MAX_WIDTH / width;
-            width = MAX_WIDTH;
-          }
-        } else {
-          if (height > MAX_HEIGHT) {
-            width *= MAX_HEIGHT / height;
-            height = MAX_HEIGHT;
-          }
-        }
-  
-        // Ajustar el tamaño del canvas
-        canvas.width = width;
-        canvas.height = height;
-  
-        // Dibujar la imagen redimensionada en el canvas
-        ctx.drawImage(img, 0, 0, width, height);
-  
-        // Obtener la imagen en base64 del canvas redimensionado
-        const optimizedSignatureDataURL = canvas.toDataURL("image/png");
-  
-        // Enviar la firma optimizada al endpoint
-        try {
-          await axios.post("http://localhost:3000/api/guardarFirmaDigital", {
-            firma: optimizedSignatureDataURL,
-          });
-          alert("Firma guardada exitosamente");
-        } catch (error) {
-          console.error("Error al guardar la firma:", error);
-          alert("Error al guardar la firma");
-        }
-      };
-    }
-  };
-  
-
-  // Redirigir a la programación de vacaciones
   const handleProgramar = () => {
     navigate("/empleados/programar-fecha");
   };
 
+  const handleVerSolicitud = () => {
+    navigate("/ver-solicitud-vacaciones");
+  };
+
+  // Función para renderizar el estado con Chip estilizado
+  const renderEstado = (estado) => {
+    const { color, label } = estadoStyles[estado.toLowerCase()] || {};
+    return (
+      <Chip
+        label={label}
+        sx={{
+          backgroundColor: color,
+          color: "#000",
+          fontWeight: "bold",
+          width: "175px",
+          textAlign: "center",
+        }}
+      />
+    );
+  };
+
   return (
-    <Box sx={{ display: "flex", height: "80vh", backgroundColor: "#f1f3f4" }}>
+    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f1f3f4" }}>
       <IconButton
         color="inherit"
         aria-label="open drawer"
@@ -137,60 +98,100 @@ const VacationApp = () => {
         <Sidebar mobileOpen={mobileOpen} />
       </Box>
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3, ml: { md: "100px" } }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, ml: { md: "50px" } }}>
         <Typography
           variant="h4"
-          sx={{ mb: 2, fontFamily: "'Roboto', sans-serif", fontWeight: "bold" }}
+          sx={{
+            mb: 2,
+            fontFamily: "'Roboto', sans-serif",
+            fontWeight: "bold",
+            textAlign: "center",
+            marginTop: 5,
+          }}
         >
-          CONTROL DE VACACIONES.
+          CONTROL DE VACACIONES
         </Typography>
         <Typography
           variant="h6"
-          sx={{ mb: 3, fontFamily: "'Roboto', sans-serif" }}
+          sx={{
+            mb: 3,
+            fontFamily: "'Roboto', sans-serif",
+            textAlign: "center",
+            marginTop: 5,
+          }}
         >
           Proceso de planificación anual
         </Typography>
 
-        {/* Tabla de Gestión de Vacaciones */}
         <TableContainer component={Paper} sx={{ mb: 4 }}>
           <Table aria-label="vacation table">
             <TableHead>
               <TableRow>
-                <TableCell>Id Gestión</TableCell>
-                <TableCell>Descripción</TableCell>
-                <TableCell>Estado Actual</TableCell>
-                <TableCell>Acción</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  Id Gestión
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  Descripción
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  Estado Actual
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  Acción
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {vacationData ? (
+              {errorS && errorS !== "NO EXISTE SOLICITUDES" ? (
+                // Si hay error, solo mostramos la alerta de error.
                 <TableRow>
-                  <TableCell>{vacationData.idGestion}</TableCell>
-                  <TableCell>{vacationData.descripcion}</TableCell>
-                  <TableCell>{vacationData.estadoActual}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleProgramar}
-                    >
-                      Programar
-                    </Button>
+                  <TableCell colSpan={4} align="center">
+                    <ErrorAlert message={errorS} visible={true} />
+                  </TableCell>
+                </TableRow>
+              ) : loadingS ? (
+                // Si estamos cargando, mostramos la alerta de "Cargando datos..."
+                <TableRow>
+                  <TableCell colSpan={4} align="center">
+                    <Alert severity="info">Cargando datos de vacaciones...</Alert>
                   </TableCell>
                 </TableRow>
               ) : (
+                // Si no hay error ni carga, renderizamos los datos.
                 <TableRow>
-                  <TableCell colSpan={4} align="center">
-                    <Alert severity="info">
-                      Cargando datos de vacaciones...
-                    </Alert>
+                  <TableCell align="center">
+                    {solicitud?.idSolicitud || "..." }
+                  </TableCell>
+                  <TableCell align="center">
+                    {solicitud ? "Solicitud de vacaciones" : "Sin Solicitudes" }
+                  </TableCell>
+                  <TableCell align="center">
+                    {renderEstado(solicitud?.estadoSolicitud || "Sin Datos")}
+                  </TableCell>
+                  <TableCell align="center">
+                    {!solicitud || solicitud?.estadoSolicitud?.toLowerCase() === "finalizadas" || solicitud?.estadoSolicitud?.toLowerCase() === "rechazada" ? (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleProgramar}
+                      >
+                        Programar
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        sx={{ backgroundColor: "#198754", color: "#fff" }}
+                        onClick={handleVerSolicitud}
+                      >
+                        Ver
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </TableContainer>
-
       </Box>
     </Box>
   );
