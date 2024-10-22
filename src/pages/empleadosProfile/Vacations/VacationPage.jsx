@@ -41,7 +41,6 @@ const VacationApp = () => {
   const navigate = useNavigate();
   useFinalizarEstado(solicitud);
 
-
   if (!isSessionVerified) {
     return <Spinner />;
   }
@@ -98,7 +97,7 @@ const VacationApp = () => {
         <Sidebar mobileOpen={mobileOpen} />
       </Box>
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3, ml: { md: "50px" } }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, ml: { md: "10px" } }}>
         <Typography
           variant="h4"
           sx={{
@@ -127,54 +126,49 @@ const VacationApp = () => {
           <Table aria-label="vacation table">
             <TableHead>
               <TableRow>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                  Id Gestión
-                </TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                  Descripción
-                </TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                  Estado Actual
-                </TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                  Acción
-                </TableCell>
+                {["Numero de Gestion", "Descripción", "Estado Actual", "Acción"].map((header) => (
+                  <TableCell
+                    key={header}
+                    align="center"
+                    sx={{
+                      fontWeight: "bold",
+                      backgroundColor: "#424242", // Fondo más oscuro
+                      color: "#fff", // Texto blanco para contraste
+                    }}
+                  >
+                    {header}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>
               {errorS && errorS !== "NO EXISTE SOLICITUDES" ? (
-                // Si hay error, solo mostramos la alerta de error.
                 <TableRow>
                   <TableCell colSpan={4} align="center">
                     <ErrorAlert message={errorS} visible={true} />
                   </TableCell>
                 </TableRow>
               ) : loadingS ? (
-                // Si estamos cargando, mostramos la alerta de "Cargando datos..."
                 <TableRow>
                   <TableCell colSpan={4} align="center">
                     <Alert severity="info">Cargando datos de vacaciones...</Alert>
                   </TableCell>
                 </TableRow>
               ) : (
-                // Si no hay error ni carga, renderizamos los datos.
                 <TableRow>
                   <TableCell align="center">
-                    {solicitud?.idSolicitud || "..." }
+                    {solicitud ? "SLVC-" + solicitud?.idSolicitud : "..."}
                   </TableCell>
                   <TableCell align="center">
-                    {solicitud ? "Solicitud de vacaciones" : "Sin Solicitudes" }
+                    {solicitud ? "Solicitud de vacaciones" : "Sin Solicitudes"}
                   </TableCell>
                   <TableCell align="center">
                     {renderEstado(solicitud?.estadoSolicitud || "Sin Datos")}
                   </TableCell>
                   <TableCell align="center">
-                    {!solicitud || solicitud?.estadoSolicitud?.toLowerCase() === "finalizadas" || solicitud?.estadoSolicitud?.toLowerCase() === "rechazada" ? (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleProgramar}
-                      >
+                    {!solicitud || solicitud?.estadoSolicitud?.toLowerCase() === "finalizadas" ||
+                    solicitud?.estadoSolicitud?.toLowerCase() === "rechazada" ? (
+                      <Button variant="contained" color="primary" onClick={handleProgramar}>
                         Programar
                       </Button>
                     ) : (
@@ -182,6 +176,7 @@ const VacationApp = () => {
                         variant="contained"
                         sx={{ backgroundColor: "#198754", color: "#fff" }}
                         onClick={handleVerSolicitud}
+                        disabled="true"
                       >
                         Ver
                       </Button>

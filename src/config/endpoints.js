@@ -1,4 +1,3 @@
-
 const endpoints = {
     login: '/login',
     getInfoPeresonal: '/obtenerInfoPersonal',
@@ -12,4 +11,10 @@ const endpoints = {
     GET_SOLICITUDBYID_VACACIONES: '/solicitudesById'
 };
 
-export default endpoints;
+const endpointsPost = {
+    login: '/login',
+    POST_INGRESA_SOLICITUD: '/ingresarSolicitudVacaciones'
+};
+
+export { endpoints, endpointsPost };
+export default endpoints; // Exportación por defecto

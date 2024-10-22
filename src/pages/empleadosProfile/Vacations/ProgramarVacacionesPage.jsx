@@ -7,6 +7,9 @@ import {
   TextField,
   Grid,
   Paper,
+  CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import Sidebar from "../../../components/EmpleadosPage/SideBar/SideBar";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -20,6 +23,11 @@ import {
 } from "../../../services/utils/dates/vacationUtils.js";
 import useDiasFestivos from "../../../hooks/DiasFestivos/useDiasFestivos.js";
 import { getLocalStorageData } from "../../../services/session/getLocalStorageData.js";
+import { ingresarSolicitudService } from "../../../services/VacationApp/InresarSolicitud.service.js";
+import ErrorAlert from "../../../components/ErrorAlert/ErrorAlert";
+import { useNavigate } from "react-router-dom"; // Importación para la navegación
+import Slide from "@mui/material/Slide"; // Importación de Slide para la animación
+import { useSolicitudById } from "../../../hooks/VacationAppHooks/useSolicitudById.js";
 
 const ProgramarVacacionesPage = () => {
   const isSessionVerified = useCheckSession();
@@ -29,11 +37,24 @@ const ProgramarVacacionesPage = () => {
   const [endDate, setEndDate] = useState("");
   const [nextWorkDate, setNextWorkDate] = useState("");
   const [unidad, setUnidad] = useState("");
+  const [idEmpleado, setIdEmpleado] = useState("");
+  const [idInfoPersonal, setIdInfoPersonal] = useState("");
   const [diasHabilitado, setDiasHabilitado] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false); // Estado para el mensaje de éxito
+  const navigate = useNavigate(); // Hook para redirección
+
+  const { solicitud, errorS, loadingS } = useSolicitudById();
+
+  console.log(solicitud);
 
   const { isLoading, errorDF } = useDiasFestivos();
   const minStartDate = dayjs().add(7, "day").format("YYYY-MM-DD");
-  const lastStartDate = dayjs().endOf("year").subtract(51, "day").format("YYYY-MM-DD");
+  const lastStartDate = dayjs()
+    .endOf("year")
+    .subtract(51, "day")
+    .format("YYYY-MM-DD");
 
   const formatDateToDisplay = (date) => dayjs(date).format("DD/MM/YYYY");
 
@@ -41,6 +62,8 @@ const ProgramarVacacionesPage = () => {
     const userData = getLocalStorageData();
     if (userData?.unidad) {
       setUnidad(userData.unidad);
+      setIdEmpleado(userData.idEmpleado);
+      setIdInfoPersonal(userData.idInfoPersonal);
     }
   }, []);
 
@@ -53,8 +76,8 @@ const ProgramarVacacionesPage = () => {
       return;
     }
     setStartDate(selectedDate);
-    setDiasVacaciones(""); // Reinicia días
-    setDiasHabilitado(true); // Habilita el campo de días
+    setDiasVacaciones("");
+    setDiasHabilitado(true);
     setEndDate("");
     setNextWorkDate("");
   };
@@ -63,8 +86,8 @@ const ProgramarVacacionesPage = () => {
     const dias = parseInt(e.target.value, 10) || 0;
     setDiasVacaciones(dias);
 
-    if(dias > 20){
-      alert("solo puedes programar un maximo de 20 dias");
+    if (dias > 20) {
+      alert("Solo puedes programar un máximo de 20 días.");
       setDiasVacaciones("");
       setEndDate("");
       setNextWorkDate("");
@@ -80,19 +103,45 @@ const ProgramarVacacionesPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (startDate && endDate) {
-      console.log("Enviando solicitud:", { startDate, endDate, diasVacaciones });
+    setLoading(true);
+    setError(null);
+
+    const payload = {
+      idEmpleado,
+      idInfoPersonal,
+      unidadSolicitud: unidad,
+      fechaInicioVacaciones: startDate,
+      fechaFinVacaciones: endDate,
+      fechaRetornoLabores: nextWorkDate,
+      cantidadDiasSolicitados: diasVacaciones,
+    };
+
+    try {
+      setDiasHabilitado(false)
+      const res = await ingresarSolicitudService(payload);
+      setSuccessOpen(true); // Mostrar Snackbar de éxito
+      setTimeout(() => {
+        navigate("/empleados/programar-vacaciones"); // Redirigir después de 3 segundos
+      }, 2000);
+    } catch (error) {
+      setError(
+        error.response
+          ? "Error en la solicitud. Inténtalo de nuevo."
+          : "Hubo un problema con el servicio. Intenta más tarde."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!isSessionVerified || !isLoading) {
+  if (!isSessionVerified || !isLoading || loadingS) {
     return <Spinner />;
   }
 
   return (
-    <Box sx={{ display: "flex", height: "80vh", backgroundColor: "#f1f3f4" }}>
+    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f1f3f4" }}>
       <IconButton
         color="inherit"
         aria-label="open drawer"
@@ -133,15 +182,32 @@ const ProgramarVacacionesPage = () => {
           variant="h4"
           align="center"
           gutterBottom
-          sx={{ fontFamily: '"Comic Sans MS", cursive', color: "#1976d2", mt: 8 }}
+          sx={{
+            fontFamily: "'Roboto', 'cursive', sans-serif",
+            color: "#054c95",
+            fontWeight: "bold",
+            mt: 10
+          }}
         >
           Programa tus vacaciones
         </Typography>
 
+        <Box sx={{ height: 30, mb:3}}>
+          {(error || errorS) && (
+            <ErrorAlert message={error} visible={true} />
+          )}
+        </Box>
+
         <Paper
           component="form"
           elevation={3}
-          sx={{ p: 4, width: "100%", maxWidth: "600px", mt: 2, borderRadius: "8px" }}
+          sx={{
+            p: 4,
+            width: "100%",
+            maxWidth: "500px",
+            borderRadius: "8px",
+            mb:15
+          }}
           onSubmit={handleSubmit}
         >
           <Grid container spacing={2}>
@@ -173,10 +239,9 @@ const ProgramarVacacionesPage = () => {
             <Grid item xs={12}>
               <TextField
                 label="Fecha de fin"
-                type="text"
                 fullWidth
-                InputLabelProps={{ shrink: true }}
                 value={endDate ? formatDateToDisplay(endDate) : ""}
+                InputLabelProps={{ shrink: true }}
                 inputProps={{ readOnly: true }}
                 disabled={!diasHabilitado}
               />
@@ -185,10 +250,9 @@ const ProgramarVacacionesPage = () => {
             <Grid item xs={12}>
               <TextField
                 label="Fecha de reintegro"
-                type="text"
                 fullWidth
-                InputLabelProps={{ shrink: true }}
                 value={nextWorkDate ? formatDateToDisplay(nextWorkDate) : ""}
+                InputLabelProps={{ shrink: true }}
                 inputProps={{ readOnly: true }}
                 disabled={!diasHabilitado}
               />
@@ -197,27 +261,60 @@ const ProgramarVacacionesPage = () => {
             <Grid item xs={12}>
               <TextField
                 label="Unidad"
-                type="text"
                 fullWidth
-                InputLabelProps={{ shrink: true }}
                 value={unidad}
+                InputLabelProps={{ shrink: true }}
                 inputProps={{ readOnly: true }}
-                disabled={!diasHabilitado}
               />
             </Grid>
-          </Grid>
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 3 }}
-            disabled={!startDate || !diasVacaciones}
-          >
-            Programar vacaciones
-          </Button>
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                disabled={!diasHabilitado || loading || !diasVacaciones}
+              >
+                {loading ? <CircularProgress size={24} /> : "Enviar Solicitud"}
+              </Button>
+            </Grid>
+          </Grid>
         </Paper>
+
+        {/* Snackbar para mostrar el mensaje de éxito */}
+        <Snackbar
+          open={successOpen}
+          onClose={() => setSuccessOpen(false)}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }} // Posición superior derecha
+          //autoHideDuration={6000000} // Duración de la visibilidad
+          TransitionComponent={Slide} // Transición para la animación
+          sx={{
+            "& .MuiSnackbarContent-root": {
+              padding: "8px 16px",
+              minWidth: "200px",
+            },
+          }} // Estilo para el contenido
+        >
+          <Alert
+            onClose={() => setSuccessOpen(false)}
+            severity="success"
+            sx={{
+              width: "100%",
+              fontSize: "1.0Srem",
+              backgroundColor: "#28a745", // Color verde Bootstrap
+              color: "#ffffff", // Color de texto blanco para contraste
+              "& .MuiAlert-icon": {
+                color: "#ffffff", // Color del icono
+              },
+              "& .MuiAlert-action": {
+                color: "#ffffff", // Color de acción si se añade un botón
+              },
+            }} // Cambiar tamaño de fuente y ancho
+          >
+            Solicitud enviada exitosamente
+          </Alert>
+        </Snackbar>
       </Box>
     </Box>
   );
