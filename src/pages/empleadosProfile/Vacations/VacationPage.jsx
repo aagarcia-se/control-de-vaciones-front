@@ -22,13 +22,11 @@ import { useCheckSession } from "../../../services/session/checkSession";
 import { useNavigate } from "react-router-dom";
 import { useSolicitudById } from "../../../hooks/VacationAppHooks/useSolicitudById";
 import ErrorAlert from "../../../components/ErrorAlert/ErrorAlert";
-import { validarFechaFin } from "../../../services/utils/dates/vacationUtils"; 
 import { useFinalizarEstado } from "../../../hooks/VacationAppHooks/useFinalizarEstado";
 
 // Mapeo de colores y etiquetas para los estados
 const estadoStyles = {
   enviada: { color: "#90caf9", label: "Solicitud Enviada" },
-  revisión: { color: "#d9c611", label: "Solicitud en revisión" },
   autorizadas: { color: "#a5d6a7", label: "Solicitud autorizada" },
   rechazada: { color: "#ef9a9a", label: "Solicitud rechazada" },
   finalizadas: { color: "#e483d3", label: "Vacaciones finalizadas" },
@@ -176,7 +174,6 @@ const VacationApp = () => {
                         variant="contained"
                         sx={{ backgroundColor: "#198754", color: "#fff" }}
                         onClick={handleVerSolicitud}
-                        disabled="true"
                       >
                         Ver
                       </Button>

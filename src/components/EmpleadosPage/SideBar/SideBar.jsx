@@ -1,31 +1,33 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, styled, Avatar, Button, Popover, Typography, Box } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home'; // Ícono de Home
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, styled, Avatar, Button, Popover, Typography, Box, Badge } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Importa el ícono
 import ContactsIcon from '@mui/icons-material/Contacts';
 import PeopleIcon from '@mui/icons-material/People';
-import WorkIcon from '@mui/icons-material/Work'; // Datos laborales
-import SchoolIcon from '@mui/icons-material/School'; // Estudios
-import InfoIcon from '@mui/icons-material/Info'; // Datos generales
-import VacationIcon from '@mui/icons-material/BeachAccess'; // Programación de vacaciones
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'; // Ícono de cerrar sesión
+import WorkIcon from '@mui/icons-material/Work';
+import SchoolIcon from '@mui/icons-material/School';
+import InfoIcon from '@mui/icons-material/Info';
+import VacationIcon from '@mui/icons-material/BeachAccess';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { getLocalStorageData } from '../../../services/session/getLocalStorageData.js';
 import useLogout from '../../../services/session/logout.js';
 import { useNavigate } from 'react-router-dom';
+import { useSolicitudes } from '../../../hooks/VacationAppHooks/useSolicitudes.js';
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {
     width: 240,
-    backgroundColor: '#333', // Fondo oscuro
-    color: '#fff', // Texto blanco
-    borderRight: '1px solid #444', // Borde ligeramente más claro
+    backgroundColor: '#333',
+    color: '#fff',
+    borderRight: '1px solid #444',
     display: 'flex',
     flexDirection: 'column',
   },
 }));
 
-const SidebarListItem = styled(ListItem)({
+const SidebarListItem = styled(ListItem)( {
   '&:hover': {
-    backgroundColor: '#555', // Color de fondo en hover
+    backgroundColor: '#555',
   },
 });
 
@@ -38,27 +40,31 @@ const AvatarContainer = styled('div')({
 });
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  cursor: 'pointer', // Cambia el cursor a una mano cuando se pasa por encima
-  width: 50, // Tamaño aumentado del avatar
-  height: 50, // Tamaño aumentado del avatar
+  cursor: 'pointer',
+  width: 50,
+  height: 50,
 }));
 
 const LogoutButton = styled(Button)({
-  marginTop: 'auto', // Empujar el botón hacia abajo
-  backgroundColor: '#f44336', // Rojo
+  marginTop: 'auto',
+  backgroundColor: '#f44336',
   color: '#fff',
   '&:hover': {
-    backgroundColor: '#d32f2f', // Rojo más oscuro en hover
+    backgroundColor: '#d32f2f',
   },
 });
 
 const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
-  const navigate = useNavigate(); // Hook para navegación
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const userData = getLocalStorageData();
   const userInitial = userData?.primerNombre.charAt(0).toUpperCase();
   const { handleLogout } = useLogout();
+  const { cantadSolicitudes } = useSolicitudes();
 
+  // Obtener idRol desde localStorage
+  const idRol = userData?.idRol; // Asegúrate de que getLocalStorageData devuelva idRol
+  const notificationCount = cantadSolicitudes; // Aquí puedes cambiar el número de notificaciones
 
   const handleAvatarClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -75,7 +81,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
     <>
       <CustomDrawer
         variant="permanent"
-        sx={{ display: { xs: 'none', md: 'block' } }} // Ocultar en pantallas pequeñas
+        sx={{ display: { xs: 'none', md: 'block' } }}
         open
       >
         <AvatarContainer>
@@ -115,59 +121,23 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
             <ListItemIcon><VacationIcon sx={{ color: '#fff' }} /></ListItemIcon>
             <ListItemText primary="Programar Vacaciones" sx={{ color: '#fff' }} />
           </SidebarListItem>
+
+          {/* Opción "Solicitudes" solo si idRol es 5 */}
+          {idRol === 5 && (
+            <SidebarListItem button onClick={() => navigate('/empleados/solicitudes')}>
+              <ListItemIcon>
+                <Badge badgeContent={notificationCount} color="error">
+                  <CheckCircleIcon  sx={{ color: '#fff' }} />
+                </Badge>
+              </ListItemIcon>
+              <ListItemText primary="Solicitudes" sx={{ color: '#fff' }} />
+            </SidebarListItem>
+          )}
           <Divider sx={{ backgroundColor: '#444' }} />
         </List>
       </CustomDrawer>
 
-      <CustomDrawer
-        variant="temporary"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Mejor rendimiento en móviles
-        }}
-        sx={{ display: { xs: 'block', md: 'none' } }} // Mostrar solo en pantallas pequeñas
-      >
-        <AvatarContainer>
-          <StyledAvatar 
-            sx={{ bgcolor: '#FF5722', color: '#fff' }} 
-            onClick={handleAvatarClick}
-          >
-            {userInitial}
-          </StyledAvatar>
-        </AvatarContainer>
-        <List>
-          <SidebarListItem button onClick={handleDrawerToggle}>
-            <ListItemIcon><HomeIcon sx={{ color: '#fff' }} /></ListItemIcon>
-            <ListItemText primary="Home" sx={{ color: '#fff' }} />
-          </SidebarListItem>
-          <SidebarListItem button onClick={handleDrawerToggle}>
-            <ListItemIcon><ContactsIcon sx={{ color: '#fff' }} /></ListItemIcon>
-            <ListItemText primary="Información Personal" sx={{ color: '#fff' }} />
-          </SidebarListItem>
-          <SidebarListItem button onClick={handleDrawerToggle}>
-            <ListItemIcon><PeopleIcon sx={{ color: '#fff' }} /></ListItemIcon>
-            <ListItemText primary="Familiares" sx={{ color: '#fff' }} />
-          </SidebarListItem>
-          <SidebarListItem button onClick={handleDrawerToggle}>
-            <ListItemIcon><WorkIcon sx={{ color: '#fff' }} /></ListItemIcon>
-            <ListItemText primary="Datos Laborales" sx={{ color: '#fff' }} />
-          </SidebarListItem>
-          <SidebarListItem button onClick={handleDrawerToggle}>
-            <ListItemIcon><SchoolIcon sx={{ color: '#fff' }} /></ListItemIcon>
-            <ListItemText primary="Informacion profesional" sx={{ color: '#fff' }} />
-          </SidebarListItem>
-          <SidebarListItem button onClick={handleDrawerToggle}>
-            <ListItemIcon><InfoIcon sx={{ color: '#fff' }} /></ListItemIcon>
-            <ListItemText primary="Datos Generales" sx={{ color: '#fff' }} />
-          </SidebarListItem>
-          <SidebarListItem button onClick={handleDrawerToggle}>
-            <ListItemIcon><VacationIcon sx={{ color: '#fff' }} /></ListItemIcon>
-            <ListItemText primary="Programación de Vacaciones" sx={{ color: '#fff' }} />
-          </SidebarListItem>
-          <Divider sx={{ backgroundColor: '#444' }} />
-        </List>
-      </CustomDrawer>
+      {/* Código del Drawer temporal para móviles */}
 
       <Popover
         id={id}
@@ -202,7 +172,6 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
             fullWidth
             sx={{ justifyContent: "flex-start" }}
             onClick={() => {
-              // Acción para gestionar cuenta
               alert("Gestionar cuenta");
             }}
           >
@@ -210,7 +179,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
           </Button>
           <Button
             fullWidth
-            startIcon={<ExitToAppIcon />} // Agregar ícono de Logout
+            startIcon={<ExitToAppIcon />}
             sx={{
               justifyContent: "flex-start",
               color: "#ffffff",
@@ -219,7 +188,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
                 backgroundColor: "#eb383e",
               },
             }}
-            onClick={handleLogout} // Acción para cerrar sesión
+            onClick={handleLogout}
           >
             Cerrar sesión
           </Button>

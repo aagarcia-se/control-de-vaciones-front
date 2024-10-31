@@ -95,3 +95,21 @@ export const validarFechaFin = (fechaFin) => {
   return today.isSameOrAfter(fechaFinWithFormat, 'day');
 };
 
+//Formatear fecha formato DD/MM/YYYY
+export const formatDateToDisplay = (date) => {
+  return dayjs(date).format("DD/MM/YYYY");
+}
+
+//Validar dias cantidad de dias de inreso
+export const validarCantidadDiasIngreso = (fechaIngreso) => {
+
+  const fechaActual = dayjs(); // Fecha actual
+  const fechaInicial = dayjs(fechaIngreso); // Fecha de ingreso en formato ISO
+
+  const diferenciaDias = fechaActual.diff(fechaInicial, 'day'); // Diferencia en días
+  console.log(diferenciaDias)
+
+  return diferenciaDias >= 150; // Devuelve true si tiene 150 días o más, false si no
+
+};
+

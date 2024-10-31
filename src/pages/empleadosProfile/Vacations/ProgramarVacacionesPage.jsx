@@ -10,7 +10,9 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
-} from "@mui/material";
+  Modal,
+} from "@mui/material"; // Agregamos Modal aquí
+import WarningIcon from "@mui/icons-material/Warning"; // Asegúrate de importar el icono
 import Sidebar from "../../../components/EmpleadosPage/SideBar/SideBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Spinner from "../../../components/spinners/spinner";
@@ -25,8 +27,8 @@ import useDiasFestivos from "../../../hooks/DiasFestivos/useDiasFestivos.js";
 import { getLocalStorageData } from "../../../services/session/getLocalStorageData.js";
 import { ingresarSolicitudService } from "../../../services/VacationApp/InresarSolicitud.service.js";
 import ErrorAlert from "../../../components/ErrorAlert/ErrorAlert";
-import { useNavigate } from "react-router-dom"; // Importación para la navegación
-import Slide from "@mui/material/Slide"; // Importación de Slide para la animación
+import { useNavigate } from "react-router-dom";
+import Slide from "@mui/material/Slide";
 import { useSolicitudById } from "../../../hooks/VacationAppHooks/useSolicitudById.js";
 
 const ProgramarVacacionesPage = () => {
@@ -42,12 +44,13 @@ const ProgramarVacacionesPage = () => {
   const [diasHabilitado, setDiasHabilitado] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [successOpen, setSuccessOpen] = useState(false); // Estado para el mensaje de éxito
-  const navigate = useNavigate(); // Hook para redirección
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
+  const [modalLeyOpen, setModalLeyOpen] = useState(false); // Estado para el modal
+  const navigate = useNavigate();
 
-  const { solicitud, errorS, loadingS } = useSolicitudById();
-
-  console.log(solicitud);
+  const { solicitud, diasValidos, errorS, loadingS } = useSolicitudById();
+  console.log(diasValidos)
 
   const { isLoading, errorDF } = useDiasFestivos();
   const minStartDate = dayjs().add(7, "day").format("YYYY-MM-DD");
@@ -65,7 +68,12 @@ const ProgramarVacacionesPage = () => {
       setIdEmpleado(userData.idEmpleado);
       setIdInfoPersonal(userData.idInfoPersonal);
     }
-  }, []);
+    // Verifica si hay una solicitud en proceso al cargar
+    if (solicitud && (solicitud.estadoSolicitud == "enviada" || solicitud.estadoSolicitud == "autorizadas") ) {
+      setModalOpen(true); // Abre el modal si hay una solicitud
+    }
+
+  }, [solicitud]); // Añadido el seguimiento a la solicitud
 
   const handleStartDateChange = (e) => {
     const selectedDate = e.target.value;
@@ -119,12 +127,12 @@ const ProgramarVacacionesPage = () => {
     };
 
     try {
-      setDiasHabilitado(false)
+      setDiasHabilitado(false);
       const res = await ingresarSolicitudService(payload);
       setSuccessOpen(true); // Mostrar Snackbar de éxito
       setTimeout(() => {
         navigate("/empleados/programar-vacaciones"); // Redirigir después de 3 segundos
-      }, 2000);
+      }, 1000);
     } catch (error) {
       setError(
         error.response
@@ -134,6 +142,11 @@ const ProgramarVacacionesPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    navigate("/empleados/programar-vacaciones"); // Redirigir al cerrar el modal
   };
 
   if (!isSessionVerified || !isLoading || loadingS) {
@@ -186,14 +199,14 @@ const ProgramarVacacionesPage = () => {
             fontFamily: "'Roboto', 'cursive', sans-serif",
             color: "#054c95",
             fontWeight: "bold",
-            mt: 10
+            mt: 10,
           }}
         >
           Programa tus vacaciones
         </Typography>
 
-        <Box sx={{ height: 30, mb:3}}>
-          {(error || errorS) && (
+        <Box sx={{ height: 30, mb: 3 }}>
+          {(error || (errorS && errorS !== "NO EXISTE SOLICITUDES")) && (
             <ErrorAlert message={error} visible={true} />
           )}
         </Box>
@@ -206,7 +219,7 @@ const ProgramarVacacionesPage = () => {
             width: "100%",
             maxWidth: "500px",
             borderRadius: "8px",
-            mb:15
+            mb: 15,
           }}
           onSubmit={handleSubmit}
         >
@@ -315,6 +328,153 @@ const ProgramarVacacionesPage = () => {
             Solicitud enviada exitosamente
           </Alert>
         </Snackbar>
+
+        <Modal
+          open={modalOpen}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "40%", // Ajustar el porcentaje para mover el modal más arriba
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              width: 400, // Ajusta el ancho según tus necesidades
+              height: "auto", // Deja que el alto se ajuste automáticamente
+              minHeight: 300, // Ajusta la altura mínima según tus necesidades
+              borderRadius: 2, // Opcional: agrega bordes redondeados
+            }}
+          >
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+              <WarningIcon color="warning" sx={{ fontSize: 40 }} />{" "}
+              {/* Ajusta el tamaño del icono */}
+            </Box>
+            <Typography
+              id="modal-title"
+              variant="h6"
+              component="h2"
+              align="center"
+              sx={{
+                fontFamily: '"Times New Roman", Times, serif', // Tipo de letra más formal
+                color: "#A00000", // Color rojo más fuerte
+              }}
+            >
+              Solicitud en Proceso
+            </Typography>
+
+            {/* Información de la solicitud */}
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="subtitle1">
+                <strong>Número de Gestión:</strong>{" "}
+                {solicitud ? solicitud.idSolicitud : "..."}
+              </Typography>
+              <Typography variant="subtitle1">
+                <strong>Fecha Inicio Vacaciones:</strong>{" "}
+                {solicitud
+                  ? new Date(
+                      solicitud.fechaInicioVacaciones
+                    ).toLocaleDateString("es-ES")
+                  : "..."}
+              </Typography>
+              <Typography variant="subtitle1">
+                <strong>Fecha fin de vacaciones:</strong>{" "}
+                {solicitud
+                  ? new Date(solicitud.fechaFinVacaciones).toLocaleDateString(
+                      "es-ES"
+                    )
+                  : "..."}
+              </Typography>
+              <Typography variant="subtitle1">
+                <strong>Fecha de Reintegro Laboral:</strong>{" "}
+                {solicitud
+                  ? new Date(solicitud.fechaRetornoLabores).toLocaleDateString(
+                      "es-ES"
+                    )
+                  : "..."}
+              </Typography>
+              <Typography variant="subtitle1">
+                <strong>Días Solicitados:</strong>{" "}
+                {solicitud ? solicitud.cantidadDiasSolicitados : "..."}
+              </Typography>
+              <Typography variant="subtitle1">
+                <strong>Estado de la Solicitud:</strong>{" "}
+                {solicitud ? solicitud.estadoSolicitud : "..."}
+              </Typography>
+            </Box>
+
+            <Button
+              onClick={handleCloseModal}
+              variant="contained"
+              sx={{ mt: 2, display: "block", mx: "auto" }}
+            >
+              Volver
+            </Button>
+          </Box>
+        </Modal>
+
+        <Modal
+          open={!diasValidos && !solicitud}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "40%", // Ajustar el porcentaje para mover el modal más arriba
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              width: 400, // Ajusta el ancho según tus necesidades
+              height: "auto", // Deja que el alto se ajuste automáticamente
+              minHeight: 300, // Ajusta la altura mínima según tus necesidades
+              borderRadius: 2, // Opcional: agrega bordes redondeados
+            }}
+          >
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+              <WarningIcon color="warning" sx={{ fontSize: 40 }} />{" "}
+              {/* Ajusta el tamaño del icono */}
+            </Box>
+            <Typography
+              id="modal-title"
+              variant="h6"
+              component="h2"
+              align="center"
+              sx={{
+                fontFamily: '"Times New Roman", Times, serif', // Tipo de letra más formal
+                color: "#A00000", // Color rojo más fuerte
+              }}
+            >
+              No puedes solicitar vacaciones
+            </Typography>
+
+            {/* Información de la solicitud */}
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="subtitle1">
+                <strong>Segun la ley 325 del organizmo judicial no cuentas con 150 dias laborados
+                        Para poder programar tus primeras vacaciones.        
+                </strong>{" "}
+              </Typography>
+            </Box>
+
+            <Button
+              onClick={handleCloseModal}
+              variant="contained"
+              sx={{ mt: 2, display: "block", mx: "auto" }}
+            >
+              Volver
+            </Button>
+          </Box>
+        </Modal>
+
+
       </Box>
     </Box>
   );

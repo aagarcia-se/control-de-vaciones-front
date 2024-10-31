@@ -20,6 +20,7 @@ import GeneralInfoPage from './pages/empleadosProfile/InformacionGeneral/General
 import EmployeePage from './pages/empleadosProfile/employeePage/employeePage'
 import VacationApp from './pages/empleadosProfile/Vacations/VacationPage'
 import ProgramarVacacionesPage from './pages/empleadosProfile/Vacations/ProgramarVacacionesPage'
+import SolicitudesPage from './pages/empleadosProfile/Vacations/SolcitudesPage'
 
 
 
@@ -47,6 +48,7 @@ function App() {
       <Route path='/empleados/informacion-laboral' element={ <EmployeePage/> }/>
       <Route path='/empleados/programar-vacaciones' element={ <VacationApp/> }/>
       <Route path='/empleados/programar-fecha' element={ <ProgramarVacacionesPage/> }/>
+      <Route path='/empleados/solicitudes' element={ <SolicitudesPage/> }/>
       
     </Routes>
   )

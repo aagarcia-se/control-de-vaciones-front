@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { getLocalStorageData } from "../../services/session/getLocalStorageData.js";
 import { getSolicitudById } from "../../services/VacationApp/GetSolicidudById.js";
+import { validarCantidadDiasIngreso } from "../../services/utils/dates/vacationUtils.js";
+
 
 export function useSolicitudById() {
   const [solicitud, setSolicitud] = useState(null); // Corregido el nombre
+  const [diasValidos, setDiasValidos] = useState(null);
   const [errorS, setErrorS] = useState(null);
   const [loadingS, setLoadingS] = useState(true);
 
@@ -15,11 +18,14 @@ export function useSolicitudById() {
           throw new Error("Sin datos en localStorage.");
         }
 
+        //validar hace cuantos dias ingreso
+         const isValidDay =  validarCantidadDiasIngreso(userData.fechaIngreso);
+         setDiasValidos(isValidDay);
+
         const { idEmpleado, idInfoPersonal } = userData;
         const data = await getSolicitudById(idEmpleado, idInfoPersonal);
         setSolicitud(data);
       } catch (error) {
-        console.log(error);
         if (error?.message && !error.response) {
           setErrorS("Servicio no disponible, intente más tarde");
         } else if (error?.response?.data?.responseData) {
@@ -35,5 +41,5 @@ export function useSolicitudById() {
     fetchSolicitud();
   }, []); // Corregido: dependencias vacías para evitar llamadas innecesarias
 
-  return { solicitud, errorS, loadingS };
+  return { solicitud, diasValidos,  errorS, loadingS };
 }
