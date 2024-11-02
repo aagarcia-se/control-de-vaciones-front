@@ -50,7 +50,6 @@ const ProgramarVacacionesPage = () => {
   const navigate = useNavigate();
 
   const { solicitud, diasValidos, errorS, loadingS } = useSolicitudById();
-  console.log(diasValidos)
 
   const { isLoading, errorDF } = useDiasFestivos();
   const minStartDate = dayjs().add(7, "day").format("YYYY-MM-DD");

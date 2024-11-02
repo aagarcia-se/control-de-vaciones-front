@@ -14,7 +14,8 @@ const endpoints = {
 
 const endpointsPost = {
     login: '/login',
-    POST_INGRESA_SOLICITUD: '/ingresarSolicitudVacaciones'
+    POST_INGRESA_SOLICITUD: '/ingresarSolicitudVacaciones',
+    POST_ACREDITARDIAS: '/acreditarDias'
 };
 
 export { endpoints, endpointsPost };

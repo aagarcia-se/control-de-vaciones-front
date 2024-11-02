@@ -1,5 +1,7 @@
 import { login } from "../auth/auth.js";
-import { createContext, useState } from  "react";
+import { createContext, useState } from "react";
+import { GuardarDiasAcreditados } from "../VacationApp/Historial/SetearDias.service.js";
+
 
 const AuthContext = createContext();
 
@@ -8,32 +10,43 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const authenticate = async (username, Password) => {
+  const authenticate = async (username, password) => {
     setLoading(true);
     setError(null);
 
     try {
-        const response = await login(username, Password);
-        setUserData(response.userLogin.userData);                                                          
-        localStorage.setItem('userData', JSON.stringify(response.userLogin.userData));    
+      const response = await login(username, password);
+      const userData = response.userLogin.userData;
+      setUserData(userData);
+      localStorage.setItem("userData", JSON.stringify(userData));
+
+      //Aqui colocamos todo lo que queremos que se ejecute en segundo plano al iniciar sesion.
+      //---------------------------------------------------------------------------------------
+
+
+      // Ejecuta `GuardarDiasAcreditados` en segundo plano
+      GuardarDiasAcreditados(userData); // Llamada sin `await`
+
+
+
+      //---------------------------------------------------------------------------------------
+      
     } catch (err) {
-      console.log(err)
-      if(err && err.message && err.response.status === 500){
+      if (err && err.message && err.response.status === 500) {
         setError("Servicio no disponible, intente más tarde");
-      }else if (err  && err.response.data.userLogin.codErr){
+      } else if (err && err.response.data.userLogin.codErr) {
         setError("Usuario o contraseña incorrectos. Por favor, inténtalo de nuevo.");
-      }else{
-        setError("Ha Ocurrido un error");
+      } else {
+        setError("Ha ocurrido un error");
       }
     } finally {
       setLoading(false);
     }
   };
 
-
   const logout = () => {
     setUserData(null);
-    localStorage.removeItem('userData');
+    localStorage.removeItem("userData");
   };
 
   const data = { logout, userData, authenticate, loading, error };

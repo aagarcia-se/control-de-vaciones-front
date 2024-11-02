@@ -100,6 +100,11 @@ export const formatDateToDisplay = (date) => {
   return dayjs(date).format("DD/MM/YYYY");
 }
 
+//Formatear fecha formato DD/MM/YYYY
+export const formatDate = (date) => {
+  return dayjs(date).format("YYYY/MM/DD");
+}
+
 //Validar dias cantidad de dias de inreso
 export const validarCantidadDiasIngreso = (fechaIngreso) => {
 
@@ -107,9 +112,45 @@ export const validarCantidadDiasIngreso = (fechaIngreso) => {
   const fechaInicial = dayjs(fechaIngreso); // Fecha de ingreso en formato ISO
 
   const diferenciaDias = fechaActual.diff(fechaInicial, 'day'); // Diferencia en días
-  console.log(diferenciaDias)
 
   return diferenciaDias >= 150; // Devuelve true si tiene 150 días o más, false si no
 
 };
+
+
+export const destructurarFecha = (fecha) => {
+  const date = dayjs(fecha);
+
+  const dia = date.date();        // Día del mes
+  const mes = date.month() + 1;   // Mes (de 0 a 11, sumamos 1 para obtener el mes correcto)
+  const anio = date.year();        // Año completo
+
+  return { dia, mes, anio };
+};
+
+export const destructurarFechaActual = () => {
+  const fechaActual = dayjs();    // Obtiene la fecha actual
+
+  const diaEnCurso = fechaActual.date();         // Día del mes
+  const mesEnCurso = fechaActual.month() + 1;    // Mes (sumamos 1 porque el índice va de 0 a 11)
+  const anioEnCurso = fechaActual.year();         // Año completo
+
+  return { diaEnCurso, mesEnCurso, anioEnCurso };
+};
+
+
+export const validarFechaUltimaActualizacion = (fechaActualizacion) =>
+  {
+ const { mes: mesUpdate } = destructurarFecha(fechaActualizacion); // Año de la última actualización
+ const { mesEnCurso } = destructurarFechaActual(); // Año en curso desestructurado
+
+ let siSeActualiza = false;
+
+ if(mesEnCurso > mesUpdate ){
+   siSeActualiza = true;
+ }
+
+ return siSeActualiza
+
+}
 
