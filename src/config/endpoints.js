@@ -9,7 +9,8 @@ const endpoints = {
     GET_DATOS_LABORALES: '/ObtenerdatosLaborales',
     GET_DIAS_FESTIVOS_C: '/getDiasFestivos',
     GET_SOLICITUDBYID_VACACIONES: '/solicitudesById',
-    GET_SOLICITUDES_VACACIONES: '/solicitudes'
+    GET_SOLICITUDES_VACACIONES: '/solicitudes',
+    GET_HISTORIAL: '/getHistorial'
 };
 
 const endpointsPost = {
