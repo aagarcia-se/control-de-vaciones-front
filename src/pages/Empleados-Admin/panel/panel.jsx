@@ -4,12 +4,12 @@ import SaveIcon from "@mui/icons-material/Save";
 import PeopleIcon from "@mui/icons-material/People";
 import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import EventIcon from "@mui/icons-material/Event";
-import Navbar from "../../components/navBar/NavBar";
-import PanelCard from "../../components/card/cardPanel";
-import { useCheckSession } from "../../services/session/checkSession.js";
-import Spinner from "../../components/spinners/spinner.jsx";
-import { getLocalStorageData } from "../../services/session/getLocalStorageData.js";
-import { useRedirectLogin, useRedirectPage } from "../../hooks/LoginHooks/RedirectLoginHook.js";
+import Navbar from "../../../components/navBar/NavBar.jsx";
+import PanelCard from "../../../components/card/cardPanel.jsx";
+import { useCheckSession } from "../../../services/session/checkSession.js";
+import Spinner from "../../../components/spinners/spinner.jsx";
+import { getLocalStorageData } from "../../../services/session/getLocalStorageData.js";
+import { useRedirectLogin, useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook.js";
 
 export default function ControlPanel() {
   const isSessionVerified = useCheckSession();
@@ -56,7 +56,7 @@ export default function ControlPanel() {
               icon={<BeachAccessIcon sx={{ color: "#fff" }} />}
               backgroundColor="#4caf50"
               textColor="#fff"
-              to="/vacaciones-programadas"
+              to="/vacaciones-empleados"
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>

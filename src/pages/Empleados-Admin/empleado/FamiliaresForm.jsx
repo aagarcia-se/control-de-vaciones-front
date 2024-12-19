@@ -17,7 +17,7 @@ import {
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
-import ProgressBar from "../../components/progresBar/ProgresBar";
+import ProgressBar from "../../../components/progresBar/ProgresBar";
 import { useNavigate } from "react-router-dom";
 
 function FamiliaresForm() {

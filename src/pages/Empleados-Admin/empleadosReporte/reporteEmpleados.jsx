@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import axios from "axios";
-import Navbar from "../../components/navBar/NavBar";
+import Navbar from "../../../components/navBar/NavBar";
 import { Container, Button } from "@mui/material";
 import * as XLSX from "xlsx"; // Importa la biblioteca XLSX
 

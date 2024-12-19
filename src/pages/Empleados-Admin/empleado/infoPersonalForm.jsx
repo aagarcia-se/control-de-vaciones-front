@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import ProgressBar from "../../components/progresBar/ProgresBar";
+import ProgressBar from "../../../components/progresBar/ProgresBar";
 
 const PersonalInfoForm = () => {
   // Setear datos del formulario

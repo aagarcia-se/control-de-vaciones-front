@@ -15,10 +15,10 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import ProgressBar from "../../components/progresBar/ProgresBar";
-import Navbar from "../../components/navBar/NavBar";
-import { useCheckSession } from "../../services/session/checkSession";
-import Spinner from "../../components/spinners/spinner";
+import ProgressBar from "../../../components/progresBar/ProgresBar";
+import Navbar from "../../../components/navBar/NavBar";
+import { useCheckSession } from "../../../services/session/checkSession";
+import Spinner from "../../../components/spinners/spinner";
 
 //Formulario para ingreso de datos del documento de identificacion
 function DocumentForm() {
