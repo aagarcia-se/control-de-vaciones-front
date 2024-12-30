@@ -29,8 +29,14 @@ import { getLocalStorageData } from "../../../services/session/getLocalStorageDa
 import { useSolicitudes } from "../../../hooks/VacationAppHooks/useSolicitudes";
 import axios from "axios";
 import { formatDateToDisplay } from "../../../services/utils/dates/vacationUtils";
+import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
 
 const SolicitudesPage = () => {
+  //VAlidar sesion y permisos
+  const isSessionVerified = useCheckSession();
+  const userData = getLocalStorageData();
+  useRedirectPage(userData);
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [selectedSolicitud, setSelectedSolicitud] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -41,9 +47,6 @@ const SolicitudesPage = () => {
   const { solicitudesU, cantadSolicitudes, errorU, loadingU } =
     useSolicitudes();
   const [successOpen, setSuccessOpen] = useState(false);
-
-  const isSessionVerified = useCheckSession();
-  const userData = getLocalStorageData();
 
   const handleVerSolicitud = (solicitud) => {
     setSelectedSolicitud(solicitud);

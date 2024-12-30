@@ -25,15 +25,7 @@ import SolicitudesPage from './pages/empleadosProfile/Vacations/SolcitudesPage'
 
 //Rutas Generales
 import './styles/App.css'; // Actualiza la ruta según la ubicación del archivo CSS
-
-
-
-
-
-
-
-
-
+import SuspensionesPage from './pages/Empleados-Admin/Suspensiones.Page'
 
 
 function App() {
@@ -42,10 +34,10 @@ function App() {
 
     <Routes>
 
-      //Componentes Generales
+      {/* Componentes Generales */}
       <Route path='/' element={ <SignIn />} /> //login
 
-      //Componentes Modulo Administrativo
+      {/* Componentes Modulo Administrativo */}
       <Route path='/panel' element={ <Panel />} />
       <Route path='/ingresar-nuevo-empleado' element={ <DocumentForm/> }/>
       <Route path='/ingresar-infoPersonal' element={ <InforPersonalForm/> }/>
@@ -55,8 +47,9 @@ function App() {
       <Route path='/nuevo-empleado' element={ <EmpleadoNuevoForm/> }/>
       <Route path='/lista-de-empleados' element={ <ReporteEmpleado/> }/>
       <Route path='/vacaciones-empleados' element={ <ReporteVacacionesEmpleados/> }/>
+      <Route path='/suspensiones' element={ <SuspensionesPage/> }/>
 
-      //Componentes Modulo de empleados
+      {/* Componentes Modulo de empleados */}
       <Route path='/empleados/home' element={ <HomePage/> }/>
       <Route path='/empleados/infoPersonal' element={ <ContactsPage/> }/>
       <Route path='/empleados/family' element={ <FamilyPage/> }/>

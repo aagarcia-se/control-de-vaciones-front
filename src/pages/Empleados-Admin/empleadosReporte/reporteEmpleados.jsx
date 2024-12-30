@@ -4,8 +4,15 @@ import axios from "axios";
 import Navbar from "../../../components/navBar/NavBar";
 import { Container, Button } from "@mui/material";
 import * as XLSX from "xlsx"; // Importa la biblioteca XLSX
+import { useCheckSession } from "../../../services/session/checkSession";
+import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
+import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
 
 export const ReporteEmpleado = () => {
+    const isSessionVerified = useCheckSession();
+    const userData = getLocalStorageData();
+    useRedirectPage(userData);
+
   // 1 - Configuramos los hooks
   const [empleados, setEmpleados] = useState([]);
 
@@ -211,6 +218,40 @@ export const ReporteEmpleado = () => {
     download: false, // Deshabilitamos la descarga CSV predeterminada de MUIDataTable
     selectableRows: "multiple", // Mantener la selección de filas
     selectableRowsHeader: false, // Ocultar el checkbox en el encabezado
+    textLabels: {
+      body: {
+        noMatch: "Lo sentimos, no se encontraron resultados.",
+        toolTip: "Ordenar",
+        columnHeaderTooltip: (column) => `Ordenar por ${column.label}`
+      },
+      pagination: {
+        next: "Siguiente página",
+        previous: "Página anterior",
+        rowsPerPage: "Filas por página:",
+        displayRows: "de"
+      },
+      toolbar: {
+        search: "Buscar",
+        downloadCsv: "Descargar CSV",
+        print: "Imprimir",
+        viewColumns: "Ver columnas",
+        filterTable: "Filtrar tabla"
+      },
+      filter: {
+        all: "Todos",
+        title: "Filtros",
+        reset: "Restablecer"
+      },
+      viewColumns: {
+        title: "Mostrar columnas",
+        titleAria: "Mostrar/ocultar columnas"
+      },
+      selectedRows: {
+        text: "fila(s) seleccionada(s)",
+        delete: "Eliminar",
+        deleteAria: "Eliminar filas seleccionadas"
+      }
+    }
   };
 
   // 6 - Renderizamos la datatable con botón de exportación a XLS

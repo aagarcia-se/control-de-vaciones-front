@@ -16,8 +16,15 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "../../../components/progresBar/ProgresBar";
+import { useCheckSession } from "../../../services/session/checkSession";
+import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
+import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
 
 function NivelEducativoForm() {
+    const isSessionVerified = useCheckSession();
+    const userData = getLocalStorageData();
+    useRedirectPage(userData);
+
   // Pasos para el ProgressBar
   const steps = [
     "DPI",

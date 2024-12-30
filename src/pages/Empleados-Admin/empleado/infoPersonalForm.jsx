@@ -16,8 +16,16 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "../../../components/progresBar/ProgresBar";
+import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
+import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
+import { useCheckSession } from "../../../services/session/checkSession";
+import Spinner from "../../../components/spinners/spinner";
 
 const PersonalInfoForm = () => {
+  const isSessionVerified = useCheckSession();
+  const userData = getLocalStorageData();
+  useRedirectPage(userData);
+
   // Setear datos del formulario
   const [primerNombre, setPrimerNombre] = useState("");
   const [segundoNombre, setSegundoNombre] = useState("");
@@ -52,7 +60,9 @@ const PersonalInfoForm = () => {
     // Función para obtener la lista de departamentos desde el servidor
     const fetchDepartamentos = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/departamentos");
+        const response = await axios.get(
+          "http://localhost:3000/api/departamentos"
+        );
         setDepartamentos(response.data.departamentos);
       } catch (error) {
         console.error("Error al obtener la lista de departamentos:", error);
@@ -62,7 +72,9 @@ const PersonalInfoForm = () => {
     // Función para obtener la lista de municipios desde el servidor
     const fetchMunicipios = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/municipios");
+        const response = await axios.get(
+          "http://localhost:3000/api/municipios"
+        );
         setMunicipios(response.data.municipios);
       } catch (error) {
         console.error("Error al obtener la lista de municipios:", error);
@@ -110,27 +122,30 @@ const PersonalInfoForm = () => {
     setError(null);
     try {
       // Enviar la información al servidor
-      const data = await axios.post("http://localhost:3000/api/infoPersonalEmpleado", {
-        primerNombre,
-        segundoNombre,
-        tercerNombre,
-        primerApellido,
-        segundoApellido,
-        apellidoCasada,
-        numeroCelular,
-        correoPersonal,
-        direccionResidencia,
-        estadoCivil,
-        genero,
-        departamentoNacimiento,
-        municipioNacimiento,
-        nit,
-        numAfiliacionIgss,
-        fechaNacimiento,
-        numeroLicencia,
-        tipoLicencia,
-        idDpi, // Agregar el ID de DPI al payload
-      });
+      const data = await axios.post(
+        "http://localhost:3000/api/infoPersonalEmpleado",
+        {
+          primerNombre,
+          segundoNombre,
+          tercerNombre,
+          primerApellido,
+          segundoApellido,
+          apellidoCasada,
+          numeroCelular,
+          correoPersonal,
+          direccionResidencia,
+          estadoCivil,
+          genero,
+          departamentoNacimiento,
+          municipioNacimiento,
+          nit,
+          numAfiliacionIgss,
+          fechaNacimiento,
+          numeroLicencia,
+          tipoLicencia,
+          idDpi, // Agregar el ID de DPI al payload
+        }
+      );
       if (data.status === 200) {
         const idInfoPersonal = data.data.responseData.idInfoPersonal;
         const storedData = localStorage.getItem("datosEmpleado");
@@ -148,7 +163,9 @@ const PersonalInfoForm = () => {
       }
     } catch (error) {
       console.error("Error al enviar la información personal:", error);
-      setError("Hubo un error al guardar la información personal. Por favor intenta de nuevo.");
+      setError(
+        "Hubo un error al guardar la información personal. Por favor intenta de nuevo."
+      );
       setTimeout(() => {
         setError(null);
       }, 5000);
@@ -156,6 +173,10 @@ const PersonalInfoForm = () => {
       setLoading(false);
     }
   };
+
+  if (!isSessionVerified) {
+    return <Spinner />; // Muestra el spinner mientras se está verificando la sesión
+  }
 
   return (
     <Container maxWidth="lg">
@@ -415,7 +436,12 @@ const PersonalInfoForm = () => {
           <Box sx={{ mt: 3, mb: 3 }}>
             <Grid item xs={12}>
               <Box display="flex" justifyContent="center">
-                <Button type="submit" variant="contained" size="small" disabled={loading}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="small"
+                  disabled={loading}
+                >
                   {loading ? <CircularProgress size={24} /> : "Siguiente"}
                 </Button>
               </Box>

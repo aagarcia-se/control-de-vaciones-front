@@ -10,13 +10,15 @@ const endpoints = {
     GET_DIAS_FESTIVOS_C: '/getDiasFestivos',
     GET_SOLICITUDBYID_VACACIONES: '/solicitudesById',
     GET_SOLICITUDES_VACACIONES: '/solicitudes',
-    GET_HISTORIAL: '/getHistorial'
+    GET_HISTORIAL: '/getHistorial',
+    GET_SUSPENSIONES: '/getSuspensiones'
 };
 
 const endpointsPost = {
     login: '/login',
     POST_INGRESA_SOLICITUD: '/ingresarSolicitudVacaciones',
-    POST_ACREDITARDIAS: '/acreditarDias'
+    POST_ACREDITARDIAS: '/acreditarDias',
+    POST_INGRESARSUSPENSIONES: '/ingresarSuspension'
 };
 
 export { endpoints, endpointsPost };

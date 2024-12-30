@@ -19,8 +19,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import ProgressBar from "../../../components/progresBar/ProgresBar";
 import { useNavigate } from "react-router-dom";
+import { useCheckSession } from "../../../services/session/checkSession";
+import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
+import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
+import Spinner from "../../../components/spinners/spinner";
 
 function FamiliaresForm() {
+  const isSessionVerified = useCheckSession();
+  const userData = getLocalStorageData();
+  useRedirectPage(userData);
+
   const [activeStep, setActiveStep] = useState(2);
   const [familiares, setFamiliares] = useState([
     { nombreFamiliar: "", telefono: "", parentesco: "", fechaNacimiento: "" },
@@ -108,11 +116,21 @@ function FamiliaresForm() {
           setAlertVisible(false);
         }, 3000);
         setFamiliares([
-          { nombreFamiliar: "", telefono: "", parentesco: "", fechaNacimiento: "" },
+          {
+            nombreFamiliar: "",
+            telefono: "",
+            parentesco: "",
+            fechaNacimiento: "",
+          },
         ]);
       } catch (error) {
-        console.error("Hubo un error al guardar los familiares:", error.response.data.responseData);
-        setError("Hubo un error al guardar los familiares. Por favor intenta de nuevo.");
+        console.error(
+          "Hubo un error al guardar los familiares:",
+          error.response.data.responseData
+        );
+        setError(
+          "Hubo un error al guardar los familiares. Por favor intenta de nuevo."
+        );
         setTimeout(() => {
           setError(null);
         }, 5000);
@@ -120,7 +138,9 @@ function FamiliaresForm() {
         setLoading(false);
       }
     } else {
-      setError("No se pudo obtener el ID de información personal del local storage.");
+      setError(
+        "No se pudo obtener el ID de información personal del local storage."
+      );
       setLoading(false);
       setTimeout(() => {
         setError(null);
@@ -131,6 +151,10 @@ function FamiliaresForm() {
   const handleNext = () => {
     navigate("/nivel-educativo");
   };
+
+  if (!isSessionVerified) {
+    return <Spinner />; // Muestra el spinner mientras se está verificando la sesión
+  }
 
   return (
     <Container maxWidth="sm">
@@ -248,7 +272,14 @@ function FamiliaresForm() {
           </Button>
         </Box>
       </form>
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: 5, marginBottom: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: 5,
+          marginBottom: 3,
+        }}
+      >
         <Button variant="contained" color="primary" onClick={handleNext}>
           Siguiente
         </Button>

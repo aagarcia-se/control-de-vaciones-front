@@ -66,7 +66,7 @@ export default function ControlPanel() {
               icon={<EventIcon sx={{ color: "#fff" }} />}
               backgroundColor="#cb2570"
               textColor="#fff"
-              to="/employee-profile"
+              to="/suspensiones"
             />
           </Grid>
           {userData.idRol === 1 && (

@@ -11,12 +11,15 @@ import {
   IconButton,
   Popover,
   Box,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PeopleIcon from "@mui/icons-material/People"; // Icono para "Lista Empleados"
 import PersonAddIcon from "@mui/icons-material/PersonAdd"; // Icono para "Ingresar Empleado"
 import NotificationsIcon from "@mui/icons-material/Notifications"; // Icono de "Notificaciones"
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"; // Icono para dropdown
 import useLogout from "../../services/session/logout.js";
 import { getLocalStorageData } from "../../services/session/getLocalStorageData.js";
 
@@ -52,17 +55,17 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 const NavButton = styled(IconButton)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  borderRadius: 0, // Asegurar que el borde sea recto
+  borderRadius: 0,
   "&:hover": {
-    backgroundColor: "#133d80", // Hover más pronunciado en color azul
-    borderRadius: "6px", // Opcional: pequeño radio para que no sea completamente cuadrado
+    backgroundColor: "#133d80",
+    borderRadius: "6px",
   },
   color: "#ffffff",
 }));
 
-
 function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [menuAnchorEl, setMenuAnchorEl] = React.useState(null); // Estado para el menú de reportes
   const { handleLogout } = useLogout();
 
   // Obtener datos del usuario desde localStorage
@@ -76,25 +79,21 @@ function Navbar() {
     setAnchorEl(null);
   };
 
+  const handleMenuClick = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
   const open = Boolean(anchorEl);
+  const menuOpen = Boolean(menuAnchorEl);
   const id = open ? "simple-popover" : undefined;
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#1e88e5" }}>
       <Toolbar>
-        {/* Agregar Logo */}
-        {/* <IconButton
-          color="inherit"
-          aria-label="logo"
-          onClick={() => (window.location.href = "/panel")}
-        >
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWaypePzMzS_4eqa5v7dxPEwauOWLmX00Y_A&s"
-            alt="Logo"
-            style={{ height: 40 }}
-          />
-        </IconButton> */}
-
         <Typography
           variant="h6"
           component="div"
@@ -103,7 +102,7 @@ function Navbar() {
           Consejo Nacional de Adopción
         </Typography>
 
-        {/* Opción Home con palabra "Home" al lado */}
+        {/* Opción Home */}
         <NavButton
           color="inherit"
           aria-label="home"
@@ -128,18 +127,61 @@ function Navbar() {
           </Typography>
         </NavButton>
 
-        {/* Opción Lista Empleados */}
+        {/* Opción Suspensiones */}
         <NavButton
           color="inherit"
-          aria-label="lista empleados"
-          onClick={() => (window.location.href = "/lista-de-empleados")}
+          aria-label="suspensiones"
+          onClick={() => (window.location.href = "/suspensiones")}
           sx={{ ml: 2 }}
         >
           <PeopleIcon />
           <Typography variant="body1" sx={{ ml: 1 }}>
-            Lista Empleados
+            Suspensiones
           </Typography>
         </NavButton>
+
+        {/* Menú Dropdown para Reportes */}
+        <NavButton
+          color="inherit"
+          aria-label="reportes"
+          onClick={handleMenuClick}
+          sx={{ ml: 2 }}
+        >
+          <Typography variant="body1" sx={{ ml: 1 }}>
+            Reportes
+          </Typography>
+          <ArrowDropDownIcon />
+        </NavButton>
+        <Menu
+          anchorEl={menuAnchorEl}
+          open={menuOpen}
+          onClose={handleMenuClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              window.location.href = "/lista-de-empleados";
+              handleMenuClose();
+            }}
+          >
+            Empleados
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              window.location.href = "/vacaciones-empleados";
+              handleMenuClose();
+            }}
+          >
+            Vacaciones
+          </MenuItem>
+        </Menu>
 
         {/* Icono de Notificaciones */}
         <IconButton color="inherit" aria-label="notificaciones">
@@ -190,7 +232,6 @@ function Navbar() {
               fullWidth
               sx={{ justifyContent: "flex-start" }}
               onClick={() => {
-                // Acción para gestionar cuenta
                 alert("Gestionar cuenta");
               }}
             >
@@ -198,7 +239,7 @@ function Navbar() {
             </Button>
             <Button
               fullWidth
-              startIcon={<LogoutIcon />} // Agregar ícono de Logout
+              startIcon={<LogoutIcon />}
               sx={{
                 justifyContent: "flex-start",
                 color: "#ffffff",
@@ -207,7 +248,7 @@ function Navbar() {
                   backgroundColor: "#eb383e",
                 },
               }}
-              onClick={handleLogout} // Acción para cerrar sesión
+              onClick={handleLogout}
             >
               Cerrar sesión
             </Button>
