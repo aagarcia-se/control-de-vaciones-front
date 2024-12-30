@@ -154,3 +154,8 @@ export const validarFechaUltimaActualizacion = (fechaActualizacion) =>
 
 }
 
+//Formatear fecha formato DD/MM/YYYY
+export const formatDateSetCalendar = (date) => {
+  return dayjs(date).format("YYYY-MM-DD");
+}
+
