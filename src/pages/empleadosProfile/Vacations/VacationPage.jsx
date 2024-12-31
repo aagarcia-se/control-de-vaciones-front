@@ -319,7 +319,7 @@ const VacationApp = () => {
                 sx={{ fontSize: "1rem", color: "#666" }}
               >
                 <strong>Fecha reintegro laboral:</strong>{" "}
-                {formatDateToDisplay(solicitud?.fechaRetornoLaboral) ||
+                {formatDateToDisplay(solicitud?.fechaRetornoLabores) ||
                   "Sin Datos"}
               </Typography>
               <Typography

@@ -5,13 +5,11 @@ import Navbar from "../../../components/navBar/NavBar";
 import { Container, Button } from "@mui/material";
 import * as XLSX from "xlsx"; // Importa la biblioteca XLSX
 import { useCheckSession } from "../../../services/session/checkSession";
-import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
-import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
+import Spinner from "../../../components/spinners/spinner";
 
 export const ReporteEmpleado = () => {
     const isSessionVerified = useCheckSession();
-    const userData = getLocalStorageData();
-    useRedirectPage(userData);
+
 
   // 1 - Configuramos los hooks
   const [empleados, setEmpleados] = useState([]);
@@ -254,6 +252,10 @@ export const ReporteEmpleado = () => {
     }
   };
 
+  if (!isSessionVerified) {
+    return <Spinner />; // Muestra el spinner mientras se está verificando la sesión
+  }
+  
   // 6 - Renderizamos la datatable con botón de exportación a XLS
   return (
     <>

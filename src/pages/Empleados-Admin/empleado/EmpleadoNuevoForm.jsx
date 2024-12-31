@@ -17,13 +17,10 @@ import ProgressBar from "../../../components/progresBar/ProgresBar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCheckSession } from "../../../services/session/checkSession";
-import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
-import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
+import Spinner from "../../../components/spinners/spinner";
 
 function EmpleadoForm() {
     const isSessionVerified = useCheckSession();
-    const userData = getLocalStorageData();
-    useRedirectPage(userData);
 
   const steps = [
     "DPI",
@@ -137,6 +134,10 @@ function EmpleadoForm() {
       setLoading(false);
     }
   };
+
+  if (!isSessionVerified) {
+    return <Spinner />; // Muestra el spinner mientras se está verificando la sesión
+  }
 
   return (
     <Container maxWidth="sm" sx={{ mb: 10 }}>

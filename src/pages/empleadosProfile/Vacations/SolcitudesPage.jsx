@@ -25,17 +25,13 @@ import Sidebar from "../../../components/EmpleadosPage/SideBar/SideBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Spinner from "../../../components/spinners/spinner";
 import { useCheckSession } from "../../../services/session/checkSession";
-import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
 import { useSolicitudes } from "../../../hooks/VacationAppHooks/useSolicitudes";
 import axios from "axios";
 import { formatDateToDisplay } from "../../../services/utils/dates/vacationUtils";
-import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
 
 const SolicitudesPage = () => {
   //VAlidar sesion y permisos
   const isSessionVerified = useCheckSession();
-  const userData = getLocalStorageData();
-  useRedirectPage(userData);
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [selectedSolicitud, setSelectedSolicitud] = useState(null);

@@ -5,16 +5,12 @@ import Navbar from "../../../components/navBar/NavBar";
 import { Container, Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import * as XLSX from "xlsx"; // Importa la biblioteca XLSX
 import { useCheckSession } from "../../../services/session/checkSession";
-import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
-import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
-import { useLocation } from "react-router-dom";
+import Spinner from "../../../components/spinners/spinner";
+
 
 export const ReporteVacacionesEmpleados = () => {
-  const location = useLocation();
-  console.log(location.pathname)
-    const isSessionVerified = useCheckSession();
-    const userData = getLocalStorageData();
-    useRedirectPage(userData);
+  const isSessionVerified = useCheckSession();
+
 
   // 1 - Configuramos los hooks
   const [vacacionesList, setVacacionesList] = useState([]);
@@ -239,6 +235,10 @@ export const ReporteVacacionesEmpleados = () => {
     )
   };
 
+  if (!isSessionVerified) {
+    return <Spinner />; // Muestra el spinner mientras se está verificando la sesión
+  }
+  
   // 7 - Renderizamos la datatable con botón de exportación a XLS y el dropdown
   return (
     <>

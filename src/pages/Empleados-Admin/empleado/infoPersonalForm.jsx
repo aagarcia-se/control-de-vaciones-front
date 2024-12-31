@@ -16,15 +16,12 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "../../../components/progresBar/ProgresBar";
-import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
-import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
 import { useCheckSession } from "../../../services/session/checkSession";
 import Spinner from "../../../components/spinners/spinner";
 
 const PersonalInfoForm = () => {
   const isSessionVerified = useCheckSession();
-  const userData = getLocalStorageData();
-  useRedirectPage(userData);
+
 
   // Setear datos del formulario
   const [primerNombre, setPrimerNombre] = useState("");

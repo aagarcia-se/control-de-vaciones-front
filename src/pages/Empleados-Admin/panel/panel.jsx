@@ -9,12 +9,10 @@ import PanelCard from "../../../components/card/cardPanel.jsx";
 import { useCheckSession } from "../../../services/session/checkSession.js";
 import Spinner from "../../../components/spinners/spinner.jsx";
 import { getLocalStorageData } from "../../../services/session/getLocalStorageData.js";
-import { useRedirectLogin, useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook.js";
 
 export default function ControlPanel() {
   const isSessionVerified = useCheckSession();
   const userData = getLocalStorageData();
-  useRedirectPage(userData);
 
   if (!isSessionVerified) {
     return <Spinner />;

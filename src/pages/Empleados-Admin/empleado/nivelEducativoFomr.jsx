@@ -17,13 +17,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "../../../components/progresBar/ProgresBar";
 import { useCheckSession } from "../../../services/session/checkSession";
-import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
-import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
+import Spinner from "../../../components/spinners/spinner";
 
 function NivelEducativoForm() {
     const isSessionVerified = useCheckSession();
-    const userData = getLocalStorageData();
-    useRedirectPage(userData);
+  
 
   // Pasos para el ProgressBar
   const steps = [
@@ -114,6 +112,10 @@ function NivelEducativoForm() {
       setLoading(false);
     }
   };
+
+  if (!isSessionVerified) {
+    return <Spinner />; // Muestra el spinner mientras se está verificando la sesión
+  }
 
   return (
     <Container maxWidth="sm">

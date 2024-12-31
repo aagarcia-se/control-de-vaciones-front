@@ -18,14 +18,11 @@ import {
   Pagination,
 } from "@mui/material";
 import { ingresarSuspension } from "../../services/EmpleadosServices/Suspensiones/Suspensiones.service";
-import { useRedirectPage } from "../../hooks/LoginHooks/RedirectLoginHook";
-import { getLocalStorageData } from "../../services/session/getLocalStorageData";
 
 const SuspensionesPage = () => {
   // Validar sesión activa
   const isSessionVerified = useCheckSession();
-  const userData = getLocalStorageData();
-  useRedirectPage(userData);
+
 
   const { suspensiones, error, loading } = useGetSuspensiones();
   const { alertVisible } = useErrorAlert(error);

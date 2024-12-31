@@ -1,29 +1,5 @@
 // src/utils/authHelpers.js
 
-const roleRoutes = {
-  4: [
-    "/empleados/home",
-    "/empleados/infoPersonal",
-    "/empleados/family",
-    "/empleados/informacion-profesional",
-    "/empleados/informacion-General",
-    "/empleados/informacion-laboral",
-    "/empleados/programar-vacaciones",
-    "/empleados/programar-fecha",
-  ],
-  5: [
-    "/empleados/home",
-    "/empleados/infoPersonal",
-    "/empleados/family",
-    "/empleados/informacion-profesional",
-    "/empleados/informacion-General",
-    "/empleados/informacion-laboral",
-    "/empleados/programar-vacaciones",
-    "/empleados/programar-fecha",
-    "/empleados/solicitudes",
-  ],
-};
-
 export const handleUserRedirect = (navigate, userData) => {
   const { idRol } = userData; // Suponiendo que el rol del usuario está en `idRol`
 
@@ -33,6 +9,7 @@ export const handleUserRedirect = (navigate, userData) => {
       navigate("/panel"); // Super usuario (todos los privilegios)
       break;
     case 3:
+      navigate("/panel"); // Super usuario (todos los privilegios)
       break;
     case 4:
       navigate("/empleados/home"); // (Empleado)

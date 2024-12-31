@@ -55,7 +55,7 @@ const ProgramarVacacionesPage = () => {
   const minStartDate = dayjs().add(7, "day").format("YYYY-MM-DD");
   const lastStartDate = dayjs()
     .endOf("year")
-    .subtract(0, "day")
+    .subtract(53, "day")
     .format("YYYY-MM-DD");
 
   const formatDateToDisplay = (date) => dayjs(date).format("DD/MM/YYYY");
@@ -231,7 +231,7 @@ const ProgramarVacacionesPage = () => {
                 InputLabelProps={{ shrink: true }}
                 value={startDate}
                 onChange={handleStartDateChange}
-                inputProps={{ min: minStartDate}}
+                inputProps={{ min: minStartDate, max: lastStartDate}}
               />
             </Grid>
 

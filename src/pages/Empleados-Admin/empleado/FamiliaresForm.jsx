@@ -20,14 +20,11 @@ import axios from "axios";
 import ProgressBar from "../../../components/progresBar/ProgresBar";
 import { useNavigate } from "react-router-dom";
 import { useCheckSession } from "../../../services/session/checkSession";
-import { getLocalStorageData } from "../../../services/session/getLocalStorageData";
-import { useRedirectPage } from "../../../hooks/LoginHooks/RedirectLoginHook";
 import Spinner from "../../../components/spinners/spinner";
 
 function FamiliaresForm() {
   const isSessionVerified = useCheckSession();
-  const userData = getLocalStorageData();
-  useRedirectPage(userData);
+
 
   const [activeStep, setActiveStep] = useState(2);
   const [familiares, setFamiliares] = useState([
