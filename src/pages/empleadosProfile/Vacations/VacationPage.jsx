@@ -53,8 +53,6 @@ const VacationApp = () => {
   const navigate = useNavigate();
   useFinalizarEstado(solicitud);
 
-  console.log(solicitud);
-
   const userData = getLocalStorageData();
 
   if (!isSessionVerified) {
