@@ -47,6 +47,7 @@ function EmpleadoForm() {
   const [numeroContrato, setNumeroContrato] = useState("");
   const [numeroActa, setNumeroActa] = useState("");
   const [numeroAcuerdo, setNumeroAcuerdo] = useState("");
+  const [isCoordinador, setIsCoordinador] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
@@ -109,6 +110,7 @@ function EmpleadoForm() {
         numeroContrato,
         numeroActa,
         numeroAcuerdo,
+        isCoordinador
       };
 
       const response = await axios.post(
@@ -126,7 +128,6 @@ function EmpleadoForm() {
       }
     } catch (error) {
       setError("Hubo un error al guardar los datos. Por favor intenta de nuevo.");
-      console.error(error);
       setTimeout(() => {
         setError(null);
       }, 5000);
@@ -170,6 +171,21 @@ function EmpleadoForm() {
                       {p.puesto}
                     </MenuItem>
                   ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth required>
+                <InputLabel id="isCoordinador-label">¿Es Coordinador?</InputLabel>
+                <Select
+                  labelId="isCoordinador-label"
+                  id="isCoordinador"
+                  value={isCoordinador}
+                  onChange={(e) => setIsCoordinador(e.target.value)}
+                  label="¿Es Coordinador?"
+                >
+                  <MenuItem value="0">No</MenuItem>
+                  <MenuItem value="1">Si</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

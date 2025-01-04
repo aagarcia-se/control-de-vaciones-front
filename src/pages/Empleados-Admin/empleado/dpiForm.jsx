@@ -33,6 +33,8 @@ function DocumentForm() {
   const [departamentos, setDepartamentos] = useState([]);
   const [municipios, setMunicipios] = useState([]);
 
+   const [municipiosFiltrados, setMunicipiosFiltrados] = useState([]);
+
   //Estados de los componentes
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
@@ -78,6 +80,20 @@ function DocumentForm() {
     "Datos Generales",
     "Empleado Nuevo",
   ];
+
+  const handleDepartamentoChange = (event) => {
+    const departamentoId = event.target.value;
+    setDepartamentoExpedicion(departamentoId);
+
+    // Filtrar municipios basados en el departamento seleccionado
+    const minId = departamentoId * 100;
+    const maxId = (departamentoId + 1) * 100;
+    const filteredMunicipios = municipios.filter(
+      (municipio) =>
+        municipio.idMunicipio >= minId && municipio.idMunicipio < maxId
+    );
+    setMunicipiosFiltrados(filteredMunicipios);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -170,57 +186,57 @@ function DocumentForm() {
                 />
               </Grid>
               <Grid item xs={6}>
-                <FormControl fullWidth required>
-                  <InputLabel id="departamentoExpedicion-label">
-                    Departamento de Expedición
-                  </InputLabel>
-                  <Select
-                    labelId="departamentoExpedicion-label"
-                    id="departamentoExpedicion"
-                    value={departamentoExpedicion}
-                    label="Departamento de Expedición"
-                    onChange={(e) => setDepartamentoExpedicion(e.target.value)}
-                  >
-                    {departamentos.map((departamento) => (
-                      <MenuItem
-                        key={departamento.idDepartamento}
-                        value={departamento.departamento}
-                      >
-                        {departamento.departamento}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl fullWidth required>
-                  <InputLabel id="municipioExpedicion-label">
-                    Municipio de Expedición
-                  </InputLabel>
-                  <Select
-                    labelId="municipioExpedicion-label"
-                    id="municipioExpedicion"
-                    value={municipioExpedicion}
-                    label="Municipio de Expedición"
-                    onChange={(e) => setMunicipioExpedicion(e.target.value)}
-                    disabled={!departamentoExpedicion}
-                  >
-                    {municipios.map((municipio) => (
-                      <MenuItem
-                        key={municipio.idMunicipio}
-                        value={municipio.municipio}
-                      >
-                        {municipio.municipio}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {!departamentoExpedicion && (
-                    <Typography variant="caption" color="error">
-                      Por favor, seleccione un departamento.
-                    </Typography>
-                  )}
-                </FormControl>
-              </Grid>
+              <FormControl fullWidth required>
+                <InputLabel id="departamentoExpedicion-label">
+                  Departamento de Expedición
+                </InputLabel>
+                <Select
+                  labelId="departamentoExpedicion-label"
+                  id="departamentoExpedicion"
+                  value={departamentoExpedicion}
+                  label="Departamento de Expedición"
+                  onChange={handleDepartamentoChange}
+                >
+                  {departamentos.map((departamento) => (
+                    <MenuItem
+                      key={departamento.idDepartamento}
+                      value={departamento.idDepartamento}
+                    >
+                      {departamento.departamento}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth required>
+              <InputLabel id="municipioExpedicion-label">
+                  Municipio de Expedición
+                </InputLabel>
+                <Select
+                  labelId="municipioExpedicion-label"
+                  id="municipioExpedicion"
+                  value={municipioExpedicion}
+                  label="Municipio de Expedición"
+                  onChange={(e) => setMunicipioExpedicion(e.target.value)}
+                  disabled={!departamentoExpedicion} // Deshabilitar si no hay departamento seleccionado
+                >
+                  {municipiosFiltrados.map((municipio) => (
+                    <MenuItem
+                      key={municipio.idMunicipio}
+                      value={municipio.idMunicipio}
+                    >
+                      {municipio.municipio}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {!departamentoExpedicion && (
+                  <Typography variant="caption" color="error">
+                    Por favor, seleccione primero un departamento.
+                  </Typography>
+                )}
+              </FormControl>
+            </Grid>
               <Grid item xs={6}>
                 <TextField
                   fullWidth
