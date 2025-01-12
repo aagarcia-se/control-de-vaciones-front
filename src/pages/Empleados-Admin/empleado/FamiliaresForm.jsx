@@ -21,6 +21,7 @@ import ProgressBar from "../../../components/progresBar/ProgresBar";
 import { useNavigate } from "react-router-dom";
 import { useCheckSession } from "../../../services/session/checkSession";
 import Spinner from "../../../components/spinners/spinner";
+import { API_URL } from "../../../config/enviroment";
 
 function FamiliaresForm() {
   const isSessionVerified = useCheckSession();
@@ -56,7 +57,7 @@ function FamiliaresForm() {
     const fetchParentescos = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/parentesco"
+          `${API_URL}/parentesco`
         );
         setParentescos(response.data.departamentos);
       } catch (error) {
@@ -103,7 +104,7 @@ function FamiliaresForm() {
             ...familiar,
           };
           const response = await axios.post(
-            "http://localhost:3000/api/ingresarFamiliar",
+             `${API_URL}/ingresarFamiliar`,
             payload
           );
           console.log("Familiar guardado:", response.data);

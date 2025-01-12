@@ -22,10 +22,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCheckSession } from "../../../services/session/checkSession";
 import Spinner from "../../../components/spinners/spinner";
+import { API_URL } from "../../../config/enviroment";
 
 function DatosGeneralesForm() {
-    const isSessionVerified = useCheckSession();
-
+  const isSessionVerified = useCheckSession();
 
   const steps = [
     "DPI",
@@ -67,9 +67,7 @@ function DatosGeneralesForm() {
 
     const fetchDiscapacidades = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/discapacidades"
-        );
+        const response = await axios.get(`${API_URL}/discapacidades`);
         setTiposDiscapacidad(response.data.discapacidades);
       } catch (error) {
         console.error("Error al obtener los tipos de discapacidad:", error);
@@ -78,9 +76,7 @@ function DatosGeneralesForm() {
 
     const fetchEtnias = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/puebloPerteneciente"
-        );
+        const response = await axios.get(`${API_URL}/puebloPerteneciente`);
         setEtnias(response.data.etnias);
       } catch (error) {
         console.error("Error al obtener las etnias:", error);
@@ -89,9 +85,7 @@ function DatosGeneralesForm() {
 
     const fetchComunidadesLinguisticas = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/comunidadLinguistica"
-        );
+        const response = await axios.get(`${API_URL}/comunidadLinguistica`);
         setComunidadesLinguisticas(response.data.comunidadesLinguisticas);
       } catch (error) {
         console.error("Error al obtener las comunidades lingüísticas:", error);
@@ -121,7 +115,7 @@ function DatosGeneralesForm() {
       };
 
       const datosMedicosResponse = await axios.post(
-        "http://localhost:3000/api/ingresarDatosMedicos",
+        `${API_URL}/ingresarDatosMedicos`,
         datosMedicosPayload
       );
 
@@ -133,7 +127,7 @@ function DatosGeneralesForm() {
         };
 
         const datosSociolinguisticosResponse = await axios.post(
-          "http://localhost:3000/api/ingresarPertenenciaSoLi",
+          `${API_URL}/ingresarPertenenciaSoLi`,
           datosSociolinguisticosPayload
         );
 

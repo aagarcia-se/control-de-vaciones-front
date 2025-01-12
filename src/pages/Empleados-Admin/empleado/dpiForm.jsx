@@ -19,11 +19,11 @@ import ProgressBar from "../../../components/progresBar/ProgresBar";
 import Navbar from "../../../components/navBar/NavBar";
 import { useCheckSession } from "../../../services/session/checkSession";
 import Spinner from "../../../components/spinners/spinner";
+import { API_URL } from "../../../config/enviroment";
 
 //Formulario para ingreso de datos del documento de identificacion
 function DocumentForm() {
   const isSessionVerified = useCheckSession();
-
 
   /*Setear datos del formulario */
   const [numeroDocumento, setNumeroDocumento] = useState("");
@@ -33,7 +33,7 @@ function DocumentForm() {
   const [departamentos, setDepartamentos] = useState([]);
   const [municipios, setMunicipios] = useState([]);
 
-   const [municipiosFiltrados, setMunicipiosFiltrados] = useState([]);
+  const [municipiosFiltrados, setMunicipiosFiltrados] = useState([]);
 
   //Estados de los componentes
   const [activeStep, setActiveStep] = useState(0);
@@ -46,9 +46,7 @@ function DocumentForm() {
     // Función para obtener la lista de departamentos desde el servidor
     const fetchDepartamentos = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/departamentos"
-        );
+        const response = await axios.get(`${API_URL}/departamentos`);
         setDepartamentos(response.data.departamentos);
       } catch (error) {
         console.error("Error al obtener la lista de departamentos:", error);
@@ -58,9 +56,7 @@ function DocumentForm() {
     // Función para obtener la lista de municipios desde el servidor
     const fetchMunicipios = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/municipios"
-        );
+        const response = await axios.get(`${API_URL}/municipios`);
         setMunicipios(response.data.municipios);
       } catch (error) {
         console.error("Error al obtener la lista de municipios:", error);
@@ -101,15 +97,12 @@ function DocumentForm() {
     setError(null);
     try {
       // Enviar la información al servidor
-      const data = await axios.post(
-        "http://localhost:3000/api/ingresarInfDpi",
-        {
-          numeroDocumento,
-          departamentoExpedicion,
-          municipioExpedicion,
-          fechaVencimientoDpi,
-        }
-      );
+      const data = await axios.post(`${API_URL}/ingresarInfDpi`, {
+        numeroDocumento,
+        departamentoExpedicion,
+        municipioExpedicion,
+        fechaVencimientoDpi,
+      });
       if (data.status === 200) {
         const empleado = {
           idDpi: data.data.idDpi, // Asigna un nombre de propiedad al valor
@@ -138,7 +131,6 @@ function DocumentForm() {
       setLoading(false);
     }
   };
-
 
   if (!isSessionVerified) {
     return <Spinner />; // Muestra el spinner mientras se está verificando la sesión
@@ -186,57 +178,57 @@ function DocumentForm() {
                 />
               </Grid>
               <Grid item xs={6}>
-              <FormControl fullWidth required>
-                <InputLabel id="departamentoExpedicion-label">
-                  Departamento de Expedición
-                </InputLabel>
-                <Select
-                  labelId="departamentoExpedicion-label"
-                  id="departamentoExpedicion"
-                  value={departamentoExpedicion}
-                  label="Departamento de Expedición"
-                  onChange={handleDepartamentoChange}
-                >
-                  {departamentos.map((departamento) => (
-                    <MenuItem
-                      key={departamento.idDepartamento}
-                      value={departamento.idDepartamento}
-                    >
-                      {departamento.departamento}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={6}>
-              <FormControl fullWidth required>
-              <InputLabel id="municipioExpedicion-label">
-                  Municipio de Expedición
-                </InputLabel>
-                <Select
-                  labelId="municipioExpedicion-label"
-                  id="municipioExpedicion"
-                  value={municipioExpedicion}
-                  label="Municipio de Expedición"
-                  onChange={(e) => setMunicipioExpedicion(e.target.value)}
-                  disabled={!departamentoExpedicion} // Deshabilitar si no hay departamento seleccionado
-                >
-                  {municipiosFiltrados.map((municipio) => (
-                    <MenuItem
-                      key={municipio.idMunicipio}
-                      value={municipio.idMunicipio}
-                    >
-                      {municipio.municipio}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {!departamentoExpedicion && (
-                  <Typography variant="caption" color="error">
-                    Por favor, seleccione primero un departamento.
-                  </Typography>
-                )}
-              </FormControl>
-            </Grid>
+                <FormControl fullWidth required>
+                  <InputLabel id="departamentoExpedicion-label">
+                    Departamento de Expedición
+                  </InputLabel>
+                  <Select
+                    labelId="departamentoExpedicion-label"
+                    id="departamentoExpedicion"
+                    value={departamentoExpedicion}
+                    label="Departamento de Expedición"
+                    onChange={handleDepartamentoChange}
+                  >
+                    {departamentos.map((departamento) => (
+                      <MenuItem
+                        key={departamento.idDepartamento}
+                        value={departamento.idDepartamento}
+                      >
+                        {departamento.departamento}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={6}>
+                <FormControl fullWidth required>
+                  <InputLabel id="municipioExpedicion-label">
+                    Municipio de Expedición
+                  </InputLabel>
+                  <Select
+                    labelId="municipioExpedicion-label"
+                    id="municipioExpedicion"
+                    value={municipioExpedicion}
+                    label="Municipio de Expedición"
+                    onChange={(e) => setMunicipioExpedicion(e.target.value)}
+                    disabled={!departamentoExpedicion} // Deshabilitar si no hay departamento seleccionado
+                  >
+                    {municipiosFiltrados.map((municipio) => (
+                      <MenuItem
+                        key={municipio.idMunicipio}
+                        value={municipio.idMunicipio}
+                      >
+                        {municipio.municipio}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {!departamentoExpedicion && (
+                    <Typography variant="caption" color="error">
+                      Por favor, seleccione primero un departamento.
+                    </Typography>
+                  )}
+                </FormControl>
+              </Grid>
               <Grid item xs={6}>
                 <TextField
                   fullWidth

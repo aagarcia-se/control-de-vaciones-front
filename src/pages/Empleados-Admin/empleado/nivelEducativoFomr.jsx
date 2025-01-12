@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import ProgressBar from "../../../components/progresBar/ProgresBar";
 import { useCheckSession } from "../../../services/session/checkSession";
 import Spinner from "../../../components/spinners/spinner";
+import { API_URL } from "../../../config/enviroment";
 
 function NivelEducativoForm() {
     const isSessionVerified = useCheckSession();
@@ -64,7 +65,7 @@ function NivelEducativoForm() {
     // Obtener los niveles educativos del servidor
     const fetchNivelesEducativos = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/nivelEducativo");
+        const response = await axios.get(`${API_URL}/nivelEducativo`);
         setNivelesEducativos(response.data.nivelEducativo);
       } catch (error) {
         console.error("Error al obtener los niveles educativos:", error);
@@ -92,7 +93,7 @@ function NivelEducativoForm() {
       };
 
       const response = await axios.post(
-        "http://localhost:3000/api/ingresarNivelEducativo",
+        `${API_URL}/ingresarNivelEducativo`,
         payload
       );
 

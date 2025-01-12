@@ -18,10 +18,10 @@ import { useNavigate } from "react-router-dom";
 import ProgressBar from "../../../components/progresBar/ProgresBar";
 import { useCheckSession } from "../../../services/session/checkSession";
 import Spinner from "../../../components/spinners/spinner";
+import { API_URL } from "../../../config/enviroment";
 
 const PersonalInfoForm = () => {
   const isSessionVerified = useCheckSession();
-
 
   // Setear datos del formulario
   const [primerNombre, setPrimerNombre] = useState("");
@@ -57,9 +57,7 @@ const PersonalInfoForm = () => {
     // Función para obtener la lista de departamentos desde el servidor
     const fetchDepartamentos = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/departamentos"
-        );
+        const response = await axios.get(`${API_URL}/departamentos`);
         setDepartamentos(response.data.departamentos);
       } catch (error) {
         console.error("Error al obtener la lista de departamentos:", error);
@@ -69,9 +67,7 @@ const PersonalInfoForm = () => {
     // Función para obtener la lista de municipios desde el servidor
     const fetchMunicipios = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/municipios"
-        );
+        const response = await axios.get(`${API_URL}/municipios`);
         setMunicipios(response.data.municipios);
       } catch (error) {
         console.error("Error al obtener la lista de municipios:", error);
@@ -119,30 +115,27 @@ const PersonalInfoForm = () => {
     setError(null);
     try {
       // Enviar la información al servidor
-      const data = await axios.post(
-        "http://localhost:3000/api/infoPersonalEmpleado",
-        {
-          primerNombre,
-          segundoNombre,
-          tercerNombre,
-          primerApellido,
-          segundoApellido,
-          apellidoCasada,
-          numeroCelular,
-          correoPersonal,
-          direccionResidencia,
-          estadoCivil,
-          genero,
-          departamentoNacimiento,
-          municipioNacimiento,
-          nit,
-          numAfiliacionIgss,
-          fechaNacimiento,
-          numeroLicencia,
-          tipoLicencia,
-          idDpi, // Agregar el ID de DPI al payload
-        }
-      );
+      const data = await axios.post(`${API_URL}/infoPersonalEmpleado`, {
+        primerNombre,
+        segundoNombre,
+        tercerNombre,
+        primerApellido,
+        segundoApellido,
+        apellidoCasada,
+        numeroCelular,
+        correoPersonal,
+        direccionResidencia,
+        estadoCivil,
+        genero,
+        departamentoNacimiento,
+        municipioNacimiento,
+        nit,
+        numAfiliacionIgss,
+        fechaNacimiento,
+        numeroLicencia,
+        tipoLicencia,
+        idDpi, // Agregar el ID de DPI al payload
+      });
       if (data.status === 200) {
         const idInfoPersonal = data.data.responseData.idInfoPersonal;
         const storedData = localStorage.getItem("datosEmpleado");

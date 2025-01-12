@@ -18,6 +18,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCheckSession } from "../../../services/session/checkSession";
 import Spinner from "../../../components/spinners/spinner";
+import { API_URL } from "../../../config/enviroment";
 
 function EmpleadoForm() {
     const isSessionVerified = useCheckSession();
@@ -71,9 +72,9 @@ function EmpleadoForm() {
     const fetchData = async () => {
       try {
         const [puestosRes, renglonesRes, unidadesRes] = await Promise.all([
-          axios.get("http://localhost:3000/api/puestos"),
-          axios.get("http://localhost:3000/api/renglonesPresupuestarios"),
-          axios.get("http://localhost:3000/api/unidades"),
+          axios.get(`${API_URL}/puestos`),
+          axios.get(`${API_URL}/renglonesPresupuestarios`),
+          axios.get(`${API_URL}/unidades`),
         ]);
 
         setPuestos(puestosRes.data.departamentos.filter(d => d.estado === "A"));
@@ -114,7 +115,7 @@ function EmpleadoForm() {
       };
 
       const response = await axios.post(
-        "http://localhost:3000/api/ingresarEmpleado",
+        `${API_URL}/ingresarEmpleado`,
         empleadoPayload
       );
 

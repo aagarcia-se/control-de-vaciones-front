@@ -6,6 +6,7 @@ import { Container, Button } from "@mui/material";
 import * as XLSX from "xlsx"; // Importa la biblioteca XLSX
 import { useCheckSession } from "../../../services/session/checkSession";
 import Spinner from "../../../components/spinners/spinner";
+import { API_URL } from "../../../config/enviroment";
 
 export const ReporteEmpleado = () => {
     const isSessionVerified = useCheckSession();
@@ -15,7 +16,7 @@ export const ReporteEmpleado = () => {
   const [empleados, setEmpleados] = useState([]);
 
   // 2 - Función para mostrar los datos con axios
-  const endpoint = "http://localhost:3000/api/employeesList";
+  const endpoint = `${API_URL}/employeesList`;
 
   const getData = async () => {
     try {

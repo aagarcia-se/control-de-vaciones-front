@@ -6,6 +6,7 @@ import { Container, Button, Select, MenuItem, FormControl, InputLabel } from "@m
 import * as XLSX from "xlsx"; // Importa la biblioteca XLSX
 import { useCheckSession } from "../../../services/session/checkSession";
 import Spinner from "../../../components/spinners/spinner";
+import { API_URL } from "../../../config/enviroment";
 
 
 export const ReporteVacacionesEmpleados = () => {
@@ -18,7 +19,7 @@ export const ReporteVacacionesEmpleados = () => {
   const [unidades, setUnidades] = useState([]); // Estado para las unidades obtenidas del API
 
   // 2 - Función para mostrar los datos con axios
-  const baseEndpoint = "http://localhost:3000/api/vacacionesReport";
+  const baseEndpoint = `${API_URL}/vacacionesReport`;
 
   const getData = async (unidadSeleccionada) => {
     try {
@@ -41,7 +42,7 @@ export const ReporteVacacionesEmpleados = () => {
   // 3 - Función para obtener las unidades desde el API
   const getUnidades = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/unidades");
+      const response = await axios.get(`${API_URL}/unidades`);
       const data = response.data.departamentos.filter((unidad) => unidad.estado === "A"); // Filtrar por estado "A"
       setUnidades(data);
     } catch (error) {

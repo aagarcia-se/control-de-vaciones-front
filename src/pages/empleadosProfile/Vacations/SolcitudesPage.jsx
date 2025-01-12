@@ -28,6 +28,7 @@ import { useCheckSession } from "../../../services/session/checkSession";
 import { useSolicitudes } from "../../../hooks/VacationAppHooks/useSolicitudes";
 import axios from "axios";
 import { formatDateToDisplay } from "../../../services/utils/dates/vacationUtils";
+import { API_URL } from "../../../config/enviroment";
 
 const SolicitudesPage = () => {
   //VAlidar sesion y permisos
@@ -62,7 +63,7 @@ const SolicitudesPage = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:3000/api/UpdateEstadoSolicitud",
+        `${API_URL}/UpdateEstadoSolicitud`,
         payload
       );
       setSuccessOpen(true); // Mostrar Snackbar de éxito
@@ -89,7 +90,7 @@ const SolicitudesPage = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:3000/api/UpdateEstadoSolicitud",
+        `${API_URL}/UpdateEstadoSolicitud`,
         payload
       );
       setSuccessOpen(true); // Mostrar Snackbar de éxito

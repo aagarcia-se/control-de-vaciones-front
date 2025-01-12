@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { API_URL } from './enviroment';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', // URL base para todas las solicitudes
+  baseURL: `${API_URL}`, // URL base para todas las solicitudes
   headers: {
     'Content-Type': 'application/json', // Encabezado predeterminado
     // Puedes agregar otros encabezados aquí
